@@ -5,6 +5,7 @@
   "main": "src/rmby.js",
   "scripts": {
     "codecov": "jest --silent --coverage --coverageReporters=text-lcov | coveralls",
+    "format": "prettier --write \"src/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint \"src/**/*.js\" \"test/**/*.js\"",
     "test": "jest"
   },
@@ -16,7 +17,9 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.2.5",
     "jest": "^26.3.0",
+    "lint-staged": "^10.2.11",
     "prettier": "^2.0.5"
   },
   "jest": {
@@ -36,5 +39,20 @@
       }
     },
     "testEnvironment": "node"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "npm run lint",
+      "npm run format"
+    ],
+    "test/**/*.js": [
+      "npm run lint",
+      "npm run format"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
