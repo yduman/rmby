@@ -4,8 +4,9 @@
   "description": "Remove files by certain aspects on a given directory",
   "main": "src/rmby.js",
   "scripts": {
-    "test": "jest",
-    "lint": "eslint \"src/**/*.js\" \"test/**/*.js\""
+    "codecov": "jest --silent --coverage --coverageReporters=text-lcov | coveralls",
+    "lint": "eslint \"src/**/*.js\" \"test/**/*.js\"",
+    "test": "jest"
   },
   "author": "Yadullah Duman",
   "license": "MIT",
@@ -17,5 +18,23 @@
     "eslint-plugin-import": "^2.22.0",
     "jest": "^26.3.0",
     "prettier": "^2.0.5"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "node_modules/",
+      "test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    },
+    "testEnvironment": "node"
   }
 }
