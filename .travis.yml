@@ -9,6 +9,8 @@ cache:
     - node_modules
 install:
   - npm install
-script:
+scripts:
+  - npm install codecov -g
   - npm run test
-  - npm run test:coveralls
+after_success:
+  - codecov
