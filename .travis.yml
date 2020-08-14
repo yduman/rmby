@@ -1,0 +1,14 @@
+sudo: false
+language: node_js
+node_js:
+  - "10"
+  - "12"
+  - "14"
+cache:
+  directories:
+    - node_modules
+install:
+  - npm install
+script:
+  - npm test
+  - npm test:coveralls

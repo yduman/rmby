@@ -1,81 +1,69 @@
-import fs from "fs";
 import path from "path";
 
-const MILLIS = "millis";
-const SECONDS = "seconds";
-const MINUTES = "minutes";
-const HOURS = "hours";
+import { readdir, stat, unlink } from "./asyncFs";
+import { calcTimeDiff, TimeUnit } from "./timeUtils";
 
-const MS_IN_SECS = 60000;
-const MS_IN_HOUR = 3600000;
+export class Remove {
+  private dirPath: string;
 
-type TimeUnit = "millis" | "seconds" | "minutes" | "hours";
+  constructor(dirPath: string) {
+    this.dirPath = dirPath;
+  }
 
-export function removeOlderThan(
+  byMilliseconds(): RemoveByTime {
+    return new RemoveByTime(this.dirPath, TimeUnit.MILLIS);
+  }
+
+  bySeconds(): RemoveByTime {
+    return new RemoveByTime(this.dirPath, TimeUnit.SECONDS);
+  }
+
+  byMinutes(): RemoveByTime {
+    return new RemoveByTime(this.dirPath, TimeUnit.MINUTES);
+  }
+
+  byHours(): RemoveByTime {
+    return new RemoveByTime(this.dirPath, TimeUnit.HOURS);
+  }
+}
+
+class RemoveByTime {
+  private dirPath: string;
+  private timeUnit: TimeUnit;
+
+  constructor(dirPath: string, timeUnit: TimeUnit) {
+    this.dirPath = dirPath;
+    this.timeUnit = timeUnit;
+  }
+
+  async olderThan(threshold: number): Promise<string[]> {
+    return await removeOlderThan(this.timeUnit, this.dirPath, threshold);
+  }
+}
+
+async function removeOlderThan(
   timeUnit: TimeUnit,
   dirPath: string,
   threshold: number,
-): void {
-  fs.readdir(dirPath, (err, files) => {
-    if (err) throwError(err);
+) {
+  try {
+    const deletedFiles: string[] = [];
+    const dirChilds = await readdir(dirPath);
 
-    files.forEach((file) => {
-      const filePath = path.join(dirPath, file);
-
-      fs.stat(filePath, (err, stats) => {
-        if (err) throwError(err);
-
-        let diff;
-        switch (timeUnit) {
-          case MILLIS:
-            diff = getDiffMillis(new Date(), stats.mtime);
-            break;
-          case SECONDS:
-            diff = getDiffSeconds(new Date(), stats.mtime);
-            break;
-          case MINUTES:
-            diff = getDiffMinutes(new Date(), stats.mtime);
-            break;
-          case HOURS:
-            diff = getDiffHours(new Date(), stats.mtime);
-            break;
-          default:
-            throw new Error("The parameter 'timeUnit' has an invalid value");
-        }
-
+    dirChilds.forEach(async (child) => {
+      const childPath = path.join(dirPath, child);
+      const stats = await stat(childPath);
+      if (stats.isFile()) {
+        const diff = calcTimeDiff(timeUnit, stats.mtime);
         if (diff >= threshold) {
-          fs.unlink(filePath, (err) => {
-            if (err) throwError(err);
-          });
+          await unlink(childPath);
+          deletedFiles.push(childPath);
         }
-      });
+      }
     });
-  });
-}
 
-function throwError(error: NodeJS.ErrnoException | null) {
-  throw new Error(error?.message);
-}
-
-function floorOrCeil(diff: number) {
-  return diff > 0 ? Math.floor(diff) : Math.ceil(diff);
-}
-
-function getDiffMillis(laterDate: Date, earlierDate: Date) {
-  return laterDate.getTime() - earlierDate.getTime();
-}
-
-function getDiffSeconds(laterDate: Date, earlierDate: Date) {
-  const diff = getDiffMillis(laterDate, earlierDate) / 1000;
-  return floorOrCeil(diff);
-}
-
-function getDiffMinutes(laterDate: Date, earlierDate: Date) {
-  const diff = getDiffMillis(laterDate, earlierDate) / MS_IN_SECS;
-  return floorOrCeil(diff);
-}
-
-function getDiffHours(laterDate: Date, earlierDate: Date) {
-  const diff = getDiffMillis(laterDate, earlierDate) / MS_IN_HOUR;
-  return floorOrCeil(diff);
+    return deletedFiles;
+  } catch (error) {
+    throw new Error(error?.message);
+  }
 }

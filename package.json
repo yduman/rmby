@@ -19,7 +19,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
     "test": "jest",
-    "test:cov": "jest --silent --coverage --coverageReporters=text-lcov | coveralls",
+    "test:cov": "jest --coverage",
+    "test:coveralls": "jest --silent --coverage | coveralls",
     "test:watch": "jest --watch"
   },
   "devDependencies": {
@@ -46,7 +47,7 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "src/**/*.ts"
+      "./src/**/*.ts"
     ],
     "coveragePathIgnorePatterns": [
       "node_modules/",
