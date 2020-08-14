@@ -1,5 +1,5 @@
 {
-  "name": "@yduman/rmby",
+  "name": "rmby",
   "version": "0.0.1",
   "description": "Remove files by certain aspects on a given directory",
   "author": "Yadullah Duman",
