@@ -1,5 +1,5 @@
 {
-  "name": "rmby",
+  "name": "@yduman/rmby",
   "version": "0.0.1",
   "description": "Remove files by certain aspects on a given directory",
   "author": "Yadullah Duman",
@@ -13,6 +13,9 @@
     "type": "git",
     "url": "https://github.com/yduman/rmby.git"
   },
+  "files": [
+    "lib/**/*"
+  ],
   "keywords": [
     "file",
     "remove",
