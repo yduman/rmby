@@ -4,20 +4,31 @@
   "description": "Remove files by certain aspects on a given directory",
   "author": "Yadullah Duman",
   "license": "MIT",
-  "main": "dist/src/rmby.js",
-  "types": "dist/src/rmby.d.ts",
-  "private": true,
+  "main": "lib/rmby.js",
+  "types": "lib/rmby.d.ts",
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/yduman/rmby.git"
   },
+  "keywords": [
+    "file",
+    "remove",
+    "filter",
+    "async",
+    "fs",
+    "delete",
+    "unlink"
+  ],
   "scripts": {
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run test && npm run lint",
+    "preversion": "npm run lint",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:watch": "jest --watch"
