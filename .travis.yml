@@ -12,5 +12,6 @@ install:
 scripts:
   - npm install codecov -g
   - npm run test
+  - npm run test:cov
 after_success:
   - codecov
