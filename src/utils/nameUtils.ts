@@ -1,6 +1,18 @@
 import path from "path";
 import { readdir, unlink } from "../asyncFs";
 
+interface RemoveArgs {
+  nameValue: string;
+  dirPath: string;
+  dirContent: string[];
+  predicate: (args: PredicateArgs) => boolean;
+}
+
+interface PredicateArgs {
+  nameValue: string;
+  fileName: string;
+}
+
 export enum NameUnit {
   EQUAL_TO,
   STARTS_WITH,
@@ -20,11 +32,36 @@ export async function removeByName(
 
     switch (nameUnit) {
       case NameUnit.EQUAL_TO:
-        deletedFiles = await removeByNameEqualTo(
+        deletedFiles = await remove({
           nameValue,
-          dirContent,
           dirPath,
-        );
+          dirContent,
+          predicate: isEqual,
+        });
+        break;
+      case NameUnit.STARTS_WITH:
+        deletedFiles = await remove({
+          nameValue,
+          dirPath,
+          dirContent,
+          predicate: startsWith,
+        });
+        break;
+      case NameUnit.ENDS_WITH:
+        deletedFiles = await remove({
+          nameValue,
+          dirPath,
+          dirContent,
+          predicate: endsWith,
+        });
+        break;
+      case NameUnit.INCLUDES:
+        deletedFiles = await remove({
+          nameValue,
+          dirPath,
+          dirContent,
+          predicate: includes,
+        });
         break;
     }
 
@@ -34,18 +71,16 @@ export async function removeByName(
   }
 }
 
-async function removeByNameEqualTo(
-  nameValue: string,
-  dirContent: string[],
-  dirPath: string,
-): Promise<string[]> {
+async function remove(removeArgs: RemoveArgs): Promise<string[]> {
   try {
+    const { nameValue, dirPath, dirContent, predicate } = removeArgs;
     const deletedFiles: string[] = [];
+
     for (const fsObject of dirContent) {
       const fsObjectPath = path.join(dirPath, fsObject);
-      const fileNameWithoutExt = getRawFilename(fsObject);
+      const fileName = getRawFilename(fsObject);
 
-      if (nameValue === fileNameWithoutExt) {
+      if (predicate({ nameValue, fileName })) {
         await unlink(fsObjectPath);
         deletedFiles.push(fsObjectPath);
       }
@@ -55,6 +90,22 @@ async function removeByNameEqualTo(
   } catch (error) {
     throw new Error(error);
   }
+}
+
+function isEqual(args: PredicateArgs) {
+  return args.nameValue === args.fileName;
+}
+
+function startsWith(args: PredicateArgs) {
+  return args.fileName.startsWith(args.nameValue);
+}
+
+function endsWith(args: PredicateArgs) {
+  return args.fileName.endsWith(args.nameValue);
+}
+
+function includes(args: PredicateArgs) {
+  return args.fileName.includes(args.nameValue);
 }
 
 function getRawFilename(fsObject: string): string {
