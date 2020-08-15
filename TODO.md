@@ -1,0 +1,3 @@
+- [x] Remove by time difference
+- [ ] Remove by filename
+- [ ] Remove by file extension

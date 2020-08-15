@@ -1,3 +1,6 @@
+import path from "path";
+import { readdir, stat, unlink } from "../asyncFs";
+
 const MS_IN_SECS = 60000;
 const MS_IN_HOUR = 3600000;
 
@@ -8,10 +11,34 @@ export enum TimeUnit {
   HOURS,
 }
 
-export function calcTimeDiff(
+export async function removeOlderThan(
   timeUnit: TimeUnit,
-  lastModifiedTime: Date,
-): number {
+  dirPath: string,
+  threshold: number,
+): Promise<string[]> {
+  try {
+    const deletedFiles: string[] = [];
+    const dirContent = await readdir(dirPath);
+
+    for (const fsObject of dirContent) {
+      const fsObjectPath = path.join(dirPath, fsObject);
+      const stats = await stat(fsObjectPath);
+      if (stats.isFile()) {
+        const diff = calcTimeDiff(timeUnit, stats.mtime);
+        if (diff >= threshold) {
+          await unlink(fsObjectPath);
+          deletedFiles.push(fsObjectPath);
+        }
+      }
+    }
+
+    return deletedFiles;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+function calcTimeDiff(timeUnit: TimeUnit, lastModifiedTime: Date): number {
   let diff;
   const now = new Date();
 

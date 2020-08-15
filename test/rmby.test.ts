@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readdir, stat, unlink } from "../src/asyncFs";
 import { Remove } from "../src/rmby";
+import fs from "fs";
+
+fs.unlink;
 
 jest.mock("../src/asyncFs", () => ({
   readdir: jest.fn(),
@@ -8,24 +11,31 @@ jest.mock("../src/asyncFs", () => ({
   unlink: jest.fn(),
 }));
 
+const dirPath = "/path/to/dir";
+const dirContent = [
+  "file1.txt",
+  "file2.css",
+  "dir1",
+  "dir2",
+  "file3.html",
+  "file4.js",
+];
+const file1 = "/path/to/dir/file1.txt";
+const file2 = "/path/to/dir/file2.css";
+const file3 = "/path/to/dir/file3.html";
+const file4 = "/path/to/dir/file4.js";
+const dir1 = "/path/to/dir/dir1";
+const dir2 = "/path/to/dir/dir2";
+
 describe("rmby", () => {
   describe("remove by time", () => {
-    const dirPath = "/path/to/dir";
-    const file1 = "/path/to/dir/file1";
-    const file2 = "/path/to/dir/file2";
-    const file3 = "/path/to/dir/file3";
-    const file4 = "/path/to/dir/file4";
-    const dir1 = "/path/to/dir/dir1";
-    const dir2 = "/path/to/dir/dir2";
-
     beforeEach(() => {
-      const dirContent = ["file1", "file2", "dir1", "dir2", "file3", "file4"];
       const stats: { [key: string]: any } = {
-        "/path/to/dir/file1": {
+        "/path/to/dir/file1.txt": {
           isFile: () => true,
           mtime: new Date(Date.now() - 500),
         },
-        "/path/to/dir/file2": {
+        "/path/to/dir/file2.css": {
           isFile: () => true,
           mtime: new Date(Date.now() - 1000 * 30),
         },
@@ -35,11 +45,11 @@ describe("rmby", () => {
         "/path/to/dir/dir2": {
           isFile: () => false,
         },
-        "/path/to/dir/file3": {
+        "/path/to/dir/file3.html": {
           isFile: () => true,
           mtime: new Date(Date.now() - 1000 * 60 * 45),
         },
-        "/path/to/dir/file4": {
+        "/path/to/dir/file4.js": {
           isFile: () => true,
           mtime: new Date(Date.now() - 1000 * 60 * 60 * 6),
         },
@@ -51,10 +61,10 @@ describe("rmby", () => {
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      jest.resetAllMocks();
     });
 
-    test("should remove all files older than given milliseconds", async () => {
+    it("should remove all files older than given milliseconds", async () => {
       // arrange
       const remove = new Remove(dirPath);
 
@@ -71,7 +81,7 @@ describe("rmby", () => {
       expect(deletedFiles).toEqual([file1, file2, file3, file4]);
     });
 
-    test("should remove all files older than given seconds", async () => {
+    it("should remove all files older than given seconds", async () => {
       // arrange
       const remove = new Remove(dirPath);
 
@@ -88,7 +98,7 @@ describe("rmby", () => {
       expect(deletedFiles).toEqual([file2, file3, file4]);
     });
 
-    test("should remove all files older than given minutes", async () => {
+    it("should remove all files older than given minutes", async () => {
       // arrange
       const remove = new Remove(dirPath);
 
@@ -105,7 +115,7 @@ describe("rmby", () => {
       expect(deletedFiles).toEqual([file3, file4]);
     });
 
-    test("should remove all files older than given hours", async () => {
+    it("should remove all files older than given hours", async () => {
       // arrange
       const remove = new Remove(dirPath);
 
@@ -122,50 +132,117 @@ describe("rmby", () => {
       expect(deletedFiles).toEqual([file4]);
     });
 
-    test("should throw error in case readdir() goes wrong", () => {
+    it("should throw exception if readdir() goes wrong", async () => {
       // arrange
       const remove = new Remove(dirPath);
       (readdir as any).mockResolvedValue(new Error());
 
       // assert
-      expect(remove.byHours().olderThan(1)).rejects.toThrow();
+      await expect(remove.byHours().olderThan(1)).rejects.toBeTruthy();
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(stat).not.toHaveBeenCalled();
       expect(unlink).not.toHaveBeenCalled();
     });
 
-    test("should throw error in case stat() goes wrong", async () => {
+    it("should throw exception if stat() goes wrong", async () => {
       // arrange
       const remove = new Remove(dirPath);
-      (stat as any).mockRejectedValue(new Error());
+      (stat as any).mockResolvedValue(new Error());
 
-      try {
-        // act
-        await remove.byHours().olderThan(1);
-        expect(true).toBeFalsy();
-      } catch (error) {
-        // assert
-        expect(readdir).toHaveBeenCalledTimes(1);
-        expect(stat).toHaveBeenCalledTimes(1);
-        expect(unlink).not.toHaveBeenCalled();
-      }
+      // act & assert
+      await expect(remove.byHours().olderThan(1)).rejects.toBeTruthy();
+      expect(readdir).toHaveBeenCalledTimes(1);
+      expect(stat).toHaveBeenCalledTimes(1);
+      expect(unlink).not.toHaveBeenCalled();
     });
 
-    test("should throw error in case unlink() goes wrong", async () => {
+    it("should throw exception if unlink() goes wrong", async () => {
       // arrange
       const remove = new Remove(dirPath);
-      (unlink as any).mockRejectedValue(new Error());
+      (unlink as any).mockImplementationOnce(
+        (
+          filename: string,
+          callback: (err: NodeJS.ErrnoException | null) => void,
+        ) => {
+          callback(new Error());
+        },
+      );
 
-      try {
+      // act & assert
+      await expect(remove.byHours().olderThan(1)).rejects.toBeTruthy();
+      expect(readdir).toHaveBeenCalledTimes(1);
+      expect(stat).toHaveBeenCalled();
+      expect(unlink).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe("remove by name", () => {
+    beforeEach(() => {
+      (readdir as any).mockResolvedValue(dirContent);
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    describe("equalTo()", () => {
+      it("should remove all files that equal to provided name", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+
         // act
-        await remove.byHours().olderThan(1);
-        expect(true).toBeFalsy();
-      } catch (error) {
+        const deletedFiles = await remove.byName().equalTo("file1");
+
         // assert
         expect(readdir).toHaveBeenCalledTimes(1);
-        expect(stat).toHaveBeenCalled();
         expect(unlink).toHaveBeenCalledTimes(1);
-      }
+        expect(unlink).toHaveBeenCalledWith(file1);
+        expect(deletedFiles).toEqual([file1]);
+      });
+
+      it("should return empty array and do nothing if name is not equal", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+
+        // act
+        const deletedFiles = await remove
+          .byName()
+          .equalTo("somethingThatDoesNotExist");
+
+        // assert
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).not.toHaveBeenCalled();
+        expect(deletedFiles).toEqual([]);
+      });
+
+      it("should throw exception if readdir() goes wrong", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+        (readdir as any).mockResolvedValue(new Error());
+
+        // assert
+        expect(remove.byName().equalTo("foo")).rejects.toThrow();
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).not.toHaveBeenCalled();
+      });
+
+      it("should throw exception if unlink() goes wrong", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+        (unlink as any).mockImplementationOnce(
+          (
+            filename: string,
+            callback: (err: NodeJS.ErrnoException | null) => void,
+          ) => {
+            callback(new Error());
+          },
+        );
+
+        // act & assert
+        await expect(remove.byName().equalTo("file1")).rejects.toBeTruthy();
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });

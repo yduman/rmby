@@ -1,7 +1,6 @@
-import path from "path";
-
-import { readdir, stat, unlink } from "./asyncFs";
-import { calcTimeDiff, TimeUnit } from "./timeUtils";
+import { RemoveByTime } from "./builder/RemoveByTime";
+import { RemoveByName } from "./builder/RemoveByName";
+import { TimeUnit } from "./utils/timeUtils";
 
 export class Remove {
   private dirPath: string;
@@ -25,49 +24,8 @@ export class Remove {
   byHours(): RemoveByTime {
     return new RemoveByTime(this.dirPath, TimeUnit.HOURS);
   }
-}
 
-class RemoveByTime {
-  private dirPath: string;
-  private timeUnit: TimeUnit;
-
-  constructor(dirPath: string, timeUnit: TimeUnit) {
-    this.dirPath = dirPath;
-    this.timeUnit = timeUnit;
-  }
-
-  async olderThan(threshold: number): Promise<string[]> {
-    try {
-      return await removeOlderThan(this.timeUnit, this.dirPath, threshold);
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-}
-
-async function removeOlderThan(
-  timeUnit: TimeUnit,
-  dirPath: string,
-  threshold: number,
-) {
-  try {
-    const deletedFiles: string[] = [];
-    const dirContent = await readdir(dirPath);
-
-    for (const fsObject of dirContent) {
-      const fsObjectPath = path.join(dirPath, fsObject);
-      const stats = await stat(fsObjectPath);
-      if (stats.isFile()) {
-        const diff = calcTimeDiff(timeUnit, stats.mtime);
-        if (diff >= threshold) {
-          await unlink(fsObjectPath);
-          deletedFiles.push(fsObjectPath);
-        }
-      }
-    }
-
-    return deletedFiles;
-  } catch (error) {
-    throw new Error(error);
+  byName(): RemoveByName {
+    return new RemoveByName(this.dirPath);
   }
 }

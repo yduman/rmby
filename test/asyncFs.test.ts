@@ -11,7 +11,7 @@ const access = promisify(fs.access);
 const WRITE_FLAG = "w";
 
 describe("asyncFs", () => {
-  test("readdir() should list all children on a given directory", async () => {
+  it("should list all children on a given directory", async () => {
     // arrange
     const dirPath = tempy.directory();
     const fileName = "file-tmp.txt";
@@ -26,7 +26,7 @@ describe("asyncFs", () => {
     expect(dirChildren).toEqual([fileName]);
   });
 
-  test("stat() should return file stats", async () => {
+  it("should return file stats", async () => {
     // arrange
     const filePath = tempy.file();
     const file = await open(filePath, WRITE_FLAG);
@@ -39,7 +39,7 @@ describe("asyncFs", () => {
     expect(stats.size).toEqual(0);
   });
 
-  test("unlink() should remove a file", async () => {
+  it("should remove a file", async () => {
     // arrange
     const filePath = tempy.file();
     const file = await open(filePath, WRITE_FLAG);
