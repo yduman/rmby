@@ -28,8 +28,6 @@ export function calcTimeDiff(
     case TimeUnit.HOURS:
       diff = getDiffHours(now, lastModifiedTime);
       break;
-    default:
-      throw new Error("The parameter 'timeUnit' has an invalid value");
   }
 
   return diff;
