@@ -37,7 +37,11 @@ class RemoveByTime {
   }
 
   async olderThan(threshold: number): Promise<string[]> {
-    return await removeOlderThan(this.timeUnit, this.dirPath, threshold);
+    try {
+      return await removeOlderThan(this.timeUnit, this.dirPath, threshold);
+    } catch (error) {
+      throw new Error(error?.message);
+    }
   }
 }
 
@@ -48,19 +52,19 @@ async function removeOlderThan(
 ) {
   try {
     const deletedFiles: string[] = [];
-    const dirChilds = await readdir(dirPath);
+    const dirContent = await readdir(dirPath);
 
-    dirChilds.forEach(async (child) => {
-      const childPath = path.join(dirPath, child);
-      const stats = await stat(childPath);
+    for (const fsObject of dirContent) {
+      const fsObjectPath = path.join(dirPath, fsObject);
+      const stats = await stat(fsObjectPath);
       if (stats.isFile()) {
         const diff = calcTimeDiff(timeUnit, stats.mtime);
         if (diff >= threshold) {
-          await unlink(childPath);
-          deletedFiles.push(childPath);
+          await unlink(fsObjectPath);
+          deletedFiles.push(fsObjectPath);
         }
       }
-    });
+    }
 
     return deletedFiles;
   } catch (error) {

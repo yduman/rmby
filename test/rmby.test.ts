@@ -121,5 +121,51 @@ describe("rmby", () => {
       expect(unlink).toHaveBeenCalledWith(file4);
       expect(deletedFiles).toEqual([file4]);
     });
+
+    test("should throw error in case readdir() goes wrong", () => {
+      // arrange
+      const remove = new Remove(dirPath);
+      (readdir as any).mockResolvedValue(new Error());
+
+      // assert
+      expect(remove.byHours().olderThan(1)).rejects.toThrow();
+      expect(readdir).toHaveBeenCalledTimes(1);
+      expect(stat).not.toHaveBeenCalled();
+      expect(unlink).not.toHaveBeenCalled();
+    });
+
+    test("should throw error in case stat() goes wrong", async () => {
+      // arrange
+      const remove = new Remove(dirPath);
+      (stat as any).mockRejectedValue(new Error());
+
+      try {
+        // act
+        await remove.byHours().olderThan(1);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        // assert
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(stat).toHaveBeenCalledTimes(1);
+        expect(unlink).not.toHaveBeenCalled();
+      }
+    });
+
+    test("should throw error in case unlink() goes wrong", async () => {
+      // arrange
+      const remove = new Remove(dirPath);
+      (unlink as any).mockRejectedValue(new Error());
+
+      try {
+        // act
+        await remove.byHours().olderThan(1);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        // assert
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(stat).toHaveBeenCalled();
+        expect(unlink).toHaveBeenCalledTimes(1);
+      }
+    });
   });
 });
