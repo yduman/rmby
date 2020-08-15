@@ -30,5 +30,5 @@
 
 - Tests for `calcTimeDiff`, since it is no longer exported and is tested implicitly anyway
 
-[unreleased]: https://github.com/yduman/retro/compare/0.0.2...master
+[unreleased]: https://github.com/yduman/rmby/compare/0.0.2...master
 [0.0.2]: https://github.com/yduman/rmby/releases/tag/0.0.2
