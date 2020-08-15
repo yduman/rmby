@@ -12,5 +12,5 @@
   - [x] thatEndsWith
   - [x] thatIncludes
   - [ ] thatMatches
-- [ ] byExtension
-  - [ ] thatEquals
+- [x] byExtension
+  - [x] thatEquals

@@ -1,6 +1,6 @@
 {
   "name": "rmby",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "A Node.js library with a fluent interface for removing files asynchronously by certain aspects",
   "author": "Yadullah Duman",
   "license": "MIT",

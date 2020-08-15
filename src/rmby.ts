@@ -1,5 +1,6 @@
 import { RemoveByTime } from "./builder/RemoveByTime";
 import { RemoveByName } from "./builder/RemoveByName";
+import { RemoveByExtension } from "./builder/RemoveByExtension";
 import { TimeUnit } from "./utils/timeUtils";
 
 export class Remove {
@@ -27,5 +28,9 @@ export class Remove {
 
   byName(): RemoveByName {
     return new RemoveByName(this.dirPath);
+  }
+
+  byExtension(): RemoveByExtension {
+    return new RemoveByExtension(this.dirPath);
   }
 }

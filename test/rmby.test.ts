@@ -399,4 +399,69 @@ describe("rmby", () => {
       });
     });
   });
+
+  describe("remove by file extension", () => {
+    beforeEach(() => {
+      (readdir as any).mockResolvedValue(dirContent);
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    describe("thatEquals()", () => {
+      it("should remove all files that equal to provided file extension", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+
+        // act
+        const deletedFiles = await remove.byExtension().thatEquals(".txt");
+
+        // assert
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).toHaveBeenCalledTimes(1);
+        expect(unlink).toHaveBeenCalledWith(file1);
+        expect(deletedFiles).toEqual([file1]);
+      });
+
+      it("should return empty array and do nothing if name is not equal", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+
+        // act
+        const deletedFiles = await remove.byExtension().thatEquals(".java");
+
+        // assert
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).not.toHaveBeenCalled();
+        expect(deletedFiles).toEqual([]);
+      });
+
+      it("should throw exception if readdir() goes wrong", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+        (readdir as any).mockResolvedValue(new Error());
+
+        // assert
+        expect(remove.byExtension().thatEquals(".java")).rejects.toThrow();
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).not.toHaveBeenCalled();
+      });
+
+      it("should throw exception if unlink() goes wrong", async () => {
+        // arrange
+        const remove = new Remove(dirPath);
+        (unlink as any).mockImplementationOnce(
+          (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
+            callback(new Error());
+          },
+        );
+
+        // act & assert
+        await expect(remove.byExtension().thatEquals(".txt")).rejects.toBeTruthy();
+        expect(readdir).toHaveBeenCalledTimes(1);
+        expect(unlink).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
 });

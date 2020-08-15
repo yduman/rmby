@@ -11,13 +11,9 @@ rmby ("remove by") is a Node.js library with a fluent interface for removing fil
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
-    - [Remove files by a time aspect](#remove-files-by-a-time-aspect)
-      - [olderThan(number)](#olderthannumber)
-    - [Remove files by a name aspect](#remove-files-by-a-name-aspect)
-      - [thatEquals(string)](#thatequalsstring)
-      - [thatStartsWith(string)](#thatstartswithstring)
-      - [thatEndsWith(string)](#thatendswithstring)
-      - [thatIncludes(string)](#thatincludesstring)
+    - [Remove files by time](#remove-files-by-time)
+    - [Remove files by name](#remove-files-by-name)
+    - [Remove files by file extension](#remove-files-by-file-extension)
   - [Development](#development)
   - [Testing](#testing)
   - [Philosophy](#philosophy)
@@ -49,11 +45,9 @@ import { Remove } from "rmby";
 
 The last method of the fluent API returns always a `Promise<string[]>` containing every filepath that has been removed.
 
-### Remove files by a time aspect
+### Remove files by time
 
 Files can be deleted by a time difference in milliseconds, seconds, minutes and hours. The time difference is always checked against the current time.
-
-#### olderThan(number)
 
 ```js
 async () => await new Remove("/path/to/dir").byMilliseconds().olderThan(500);
@@ -62,32 +56,21 @@ async () => await new Remove("/path/to/dir").byMinutes().olderThan(5);
 async () => await new Remove("/path/to/dir").byHours().olderThan(2);
 ```
 
-### Remove files by a name aspect
+### Remove files by name
 
 Files can be deleted regarding its name without the file extension. Delete files that match exactly, start with, end with, or include the name that you provide.
 
-#### thatEquals(string)
-
 ```js
 async () => await new Remove("/path/to/dir").byName().thatEquals("filename");
-```
-
-#### thatStartsWith(string)
-
-```js
 async () => await new Remove("/path/to/dir").byName().thatStartsWith("file");
-```
-
-#### thatEndsWith(string)
-
-```js
 async () => await new Remove("/path/to/dir").byName().thatEndsWith("name");
+async () => await new Remove("/path/to/dir").byName().thatIncludes("lena");
 ```
 
-#### thatIncludes(string)
+### Remove files by file extension
 
 ```js
-async () => await new Remove("/path/to/dir").byName().thatIncludes("lena");
+async () => await new Remove("/path/to/dir").byExtension().thatEquals(".txt");
 ```
 
 ## Development
