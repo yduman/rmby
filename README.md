@@ -15,6 +15,9 @@ rmby ("remove by") is a Node.js library with a fluent interface for removing fil
       - [olderThan(number)](#olderthannumber)
     - [Remove files by a name aspect](#remove-files-by-a-name-aspect)
       - [equalTo(string)](#equaltostring)
+      - [thatStartsWith(string)](#thatstartswithstring)
+      - [thatEndsWith(string)](#thatendswithstring)
+      - [thatIncludes(string)](#thatincludesstring)
   - [Development](#development)
   - [Testing](#testing)
   - [Philosophy](#philosophy)
@@ -73,6 +76,39 @@ import { Remove } from "rmby";
 const remove = new Remove("/path/to/dir");
 
 remove.byName().equalTo("filename");
+```
+
+#### thatStartsWith(string)
+
+`async thatStartsWith(nameValue: string): Promise<string[]>`
+
+```js
+import { Remove } from "rmby";
+const remove = new Remove("/path/to/dir");
+
+remove.byName().thatStartsWith("file");
+```
+
+#### thatEndsWith(string)
+
+`async thatEndsWith(nameValue: string): Promise<string[]>`
+
+```js
+import { Remove } from "rmby";
+const remove = new Remove("/path/to/dir");
+
+remove.byName().thatEndsWith("name");
+```
+
+#### thatIncludes(string)
+
+`async thatIncludes(nameValue: string): Promise<string[]>`
+
+```js
+import { Remove } from "rmby";
+const remove = new Remove("/path/to/dir");
+
+remove.byName().thatIncludes("lena");
 ```
 
 ## Development
