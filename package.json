@@ -23,7 +23,9 @@
     "async",
     "fs",
     "delete",
-    "unlink"
+    "unlink",
+    "readdir",
+    "stat"
   ],
   "scripts": {
     "build": "tsc",
