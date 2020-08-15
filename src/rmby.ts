@@ -40,7 +40,7 @@ class RemoveByTime {
     try {
       return await removeOlderThan(this.timeUnit, this.dirPath, threshold);
     } catch (error) {
-      throw new Error(error?.message);
+      throw new Error(error);
     }
   }
 }
@@ -68,6 +68,6 @@ async function removeOlderThan(
 
     return deletedFiles;
   } catch (error) {
-    throw new Error(error?.message);
+    throw new Error(error);
   }
 }
