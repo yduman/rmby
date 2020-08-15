@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/yduman/rmby/branch/master/graph/badge.svg)](https://codecov.io/gh/yduman/rmby)
 ![NPM](https://img.shields.io/npm/l/rmby)
 
-rmby ("remove by") is a Node.js library with a fluent interface for removing files asynchronously by a certain aspect.
+rmby ("remove by") is a Node.js library with a fluent interface for removing files asynchronously by certain aspects.
 
 ## Installation
 
