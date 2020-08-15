@@ -10,7 +10,7 @@ describe("timeUtils", () => {
       const diff = calcTimeDiff(TimeUnit.MILLIS, lastModifiedTime);
 
       // assert
-      expect(diff).toBe(500);
+      expect(diff).toBeGreaterThanOrEqual(500);
     });
 
     test("should calculate correct seconds difference", () => {
@@ -21,7 +21,7 @@ describe("timeUtils", () => {
       const diff = calcTimeDiff(TimeUnit.SECONDS, lastModifiedTime);
 
       // assert
-      expect(diff).toBe(30);
+      expect(diff).toBeGreaterThanOrEqual(30);
     });
 
     test("should calculate correct minutes difference", () => {
@@ -32,7 +32,7 @@ describe("timeUtils", () => {
       const diff = calcTimeDiff(TimeUnit.MINUTES, lastModifiedTime);
 
       // assert
-      expect(diff).toBe(15);
+      expect(diff).toBeGreaterThanOrEqual(15);
     });
 
     test("should calculate correct hours difference", () => {
@@ -43,7 +43,7 @@ describe("timeUtils", () => {
       const diff = calcTimeDiff(TimeUnit.HOURS, lastModifiedTime);
 
       // assert
-      expect(diff).toBe(6);
+      expect(diff).toBeGreaterThanOrEqual(6);
     });
   });
 });
