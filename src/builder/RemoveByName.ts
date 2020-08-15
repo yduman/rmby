@@ -7,7 +7,7 @@ export class RemoveByName {
     this.dirPath = dirPath;
   }
 
-  async equalTo(nameValue: string): Promise<string[]> {
+  async thatEquals(nameValue: string): Promise<string[]> {
     try {
       return await removeByName(NameUnit.EQUAL_TO, this.dirPath, nameValue);
     } catch (error) {

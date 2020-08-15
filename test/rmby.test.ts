@@ -173,13 +173,13 @@ describe("rmby", () => {
       jest.resetAllMocks();
     });
 
-    describe("equalTo()", () => {
+    describe("thatEquals()", () => {
       it("should remove all files that equal to provided name", async () => {
         // arrange
         const remove = new Remove(dirPath);
 
         // act
-        const deletedFiles = await remove.byName().equalTo("file1");
+        const deletedFiles = await remove.byName().thatEquals("file1");
 
         // assert
         expect(readdir).toHaveBeenCalledTimes(1);
@@ -193,7 +193,7 @@ describe("rmby", () => {
         const remove = new Remove(dirPath);
 
         // act
-        const deletedFiles = await remove.byName().equalTo("somethingThatDoesNotExist");
+        const deletedFiles = await remove.byName().thatEquals("somethingThatDoesNotExist");
 
         // assert
         expect(readdir).toHaveBeenCalledTimes(1);
@@ -207,7 +207,7 @@ describe("rmby", () => {
         (readdir as any).mockResolvedValue(new Error());
 
         // assert
-        expect(remove.byName().equalTo("foo")).rejects.toThrow();
+        expect(remove.byName().thatEquals("foo")).rejects.toThrow();
         expect(readdir).toHaveBeenCalledTimes(1);
         expect(unlink).not.toHaveBeenCalled();
       });
@@ -222,7 +222,7 @@ describe("rmby", () => {
         );
 
         // act & assert
-        await expect(remove.byName().equalTo("file1")).rejects.toBeTruthy();
+        await expect(remove.byName().thatEquals("file1")).rejects.toBeTruthy();
         expect(readdir).toHaveBeenCalledTimes(1);
         expect(unlink).toHaveBeenCalledTimes(1);
       });

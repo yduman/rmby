@@ -14,7 +14,7 @@ rmby ("remove by") is a Node.js library with a fluent interface for removing fil
     - [Remove files by a time aspect](#remove-files-by-a-time-aspect)
       - [olderThan(number)](#olderthannumber)
     - [Remove files by a name aspect](#remove-files-by-a-name-aspect)
-      - [equalTo(string)](#equaltostring)
+      - [thatEquals(string)](#thatequalsstring)
       - [thatStartsWith(string)](#thatstartswithstring)
       - [thatEndsWith(string)](#thatendswithstring)
       - [thatIncludes(string)](#thatincludesstring)
@@ -66,10 +66,10 @@ async () => await new Remove("/path/to/dir").byHours().olderThan(2);
 
 Files can be deleted regarding its name without the file extension. Delete files that match exactly, start with, end with, or include the name that you provide.
 
-#### equalTo(string)
+#### thatEquals(string)
 
 ```js
-async () => await new Remove("/path/to/dir").byName().equalTo("filename");
+async () => await new Remove("/path/to/dir").byName().thatEquals("filename");
 ```
 
 #### thatStartsWith(string)

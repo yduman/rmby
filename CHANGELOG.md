@@ -4,7 +4,13 @@
 
 ### Added
 
+- `byName().thatStartsWith(string)`
+- `byName().thatEndsWith(string)`
+- `byName().thatIncludes(string)`
+
 ### Changed
+
+- `byName().equalTo(string)` is now `byName().thatEquals(string)` to conform the rest of the `byName()` API
 
 ### Fixed
 
