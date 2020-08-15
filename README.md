@@ -47,68 +47,47 @@ import { Remove } from "rmby";
 
 ## API
 
+The last method of the fluent API returns always a `Promise<string[]>` containing every filepath that has been removed.
+
 ### Remove files by a time aspect
 
-The time difference is always checked against the current time. Files can be deleted by a time difference in milliseconds, seconds, minutes and hours. `olderThan` will return all deleted file paths.
+Files can be deleted by a time difference in milliseconds, seconds, minutes and hours. The time difference is always checked against the current time.
 
 #### olderThan(number)
 
-`async olderThan(threshold: number): Promise<string[]>`
-
 ```js
-import { Remove } from "rmby";
-const remove = new Remove("/path/to/dir");
-
-remove.byMilliseconds().olderThan(500);
-remove.bySeconds().olderThan(30);
-remove.byMinutes().olderThan(5);
-remove.byHours().olderThan(2);
+async () => await new Remove("/path/to/dir").byMilliseconds().olderThan(500);
+async () => await new Remove("/path/to/dir").bySeconds().olderThan(30);
+async () => await new Remove("/path/to/dir").byMinutes().olderThan(5);
+async () => await new Remove("/path/to/dir").byHours().olderThan(2);
 ```
 
 ### Remove files by a name aspect
 
+Files can be deleted regarding its name without the file extension. Delete files that match exactly, start with, end with, or include the name that you provide.
+
 #### equalTo(string)
 
-`async equalTo(nameValue: string): Promise<string[]>`
-
 ```js
-import { Remove } from "rmby";
-const remove = new Remove("/path/to/dir");
-
-remove.byName().equalTo("filename");
+async () => await new Remove("/path/to/dir").byName().equalTo("filename");
 ```
 
 #### thatStartsWith(string)
 
-`async thatStartsWith(nameValue: string): Promise<string[]>`
-
 ```js
-import { Remove } from "rmby";
-const remove = new Remove("/path/to/dir");
-
-remove.byName().thatStartsWith("file");
+async () => await new Remove("/path/to/dir").byName().thatStartsWith("file");
 ```
 
 #### thatEndsWith(string)
 
-`async thatEndsWith(nameValue: string): Promise<string[]>`
-
 ```js
-import { Remove } from "rmby";
-const remove = new Remove("/path/to/dir");
-
-remove.byName().thatEndsWith("name");
+async () => await new Remove("/path/to/dir").byName().thatEndsWith("name");
 ```
 
 #### thatIncludes(string)
 
-`async thatIncludes(nameValue: string): Promise<string[]>`
-
 ```js
-import { Remove } from "rmby";
-const remove = new Remove("/path/to/dir");
-
-remove.byName().thatIncludes("lena");
+async () => await new Remove("/path/to/dir").byName().thatIncludes("lena");
 ```
 
 ## Development
