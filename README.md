@@ -79,7 +79,7 @@ rmby is developed with [TypeScript](https://www.typescriptlang.org/). The `maste
 
 ## Testing
 
-rmby is using [Jest](https://jestjs.io/) as a JavaScript Testing Framework. For testing, run `npm test`. For code coverage, run `npm run test:cov`. The goal is to stick with 100% code coverage, but never drop below 90%.
+rmby is using [Jest](https://jestjs.io/) as a JavaScript Testing Framework. For testing, run `npm test`. For code coverage, run `npm run test:cov`. The goal is to stick with 100% code coverage.
 
 ## Philosophy
 

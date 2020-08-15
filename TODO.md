@@ -12,5 +12,8 @@
   - [x] thatEndsWith
   - [x] thatIncludes
   - [ ] thatMatches
+  - [ ] thatContainsSpaces
+  - [ ] thatContainsSpecialChars
 - [x] byExtension
   - [x] thatEquals
+- [ ] recursively
