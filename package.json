@@ -1,5 +1,5 @@
 {
-  "name": "@yduman/rmby",
+  "name": "rmby",
   "version": "0.0.1",
   "description": "A Node.js library with a fluent interface for removing files asynchronously by certain aspects",
   "author": "Yadullah Duman",
@@ -16,9 +16,6 @@
   "files": [
     "lib/**/*"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "keywords": [
     "file",
     "remove",
