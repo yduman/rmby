@@ -1,3 +1,4 @@
+import { TimeUnit } from "../utils";
 import {
   DirectoryFilter,
   TimeFilter,
@@ -5,8 +6,6 @@ import {
   ExtensionFilter,
   NameFilterFunc,
 } from "./filter-interface";
-import { TimeUnit } from "../utils/timeUtils";
-import { NameUnit } from "../utils/nameUtils";
 
 export class DirFilter implements DirectoryFilter {
   dirPath: string;
@@ -27,12 +26,10 @@ export class TFilter implements TimeFilter {
 }
 
 export class NFilter implements NameFilter {
-  nameUnit: NameUnit;
   nameValue: string;
   nameFilterer: NameFilterFunc;
 
-  constructor(nameUnit: NameUnit, nameValue: string, nameFilterer: NameFilterFunc) {
-    this.nameUnit = nameUnit;
+  constructor(nameValue: string, nameFilterer: NameFilterFunc) {
     this.nameValue = nameValue;
     this.nameFilterer = nameFilterer;
   }

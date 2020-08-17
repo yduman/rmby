@@ -1,5 +1,5 @@
 export interface IRemove {
-  fromDirectory(dirPath: string): IRemoveBy;
+  from(dirPath: string): IRemoveBy;
 }
 
 export interface IRemoveBy {

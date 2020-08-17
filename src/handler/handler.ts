@@ -17,10 +17,13 @@ export abstract class AbstractHandler implements Handler {
     return handler;
   }
 
-  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
+  public async handle(
+    request: FilterState,
+    dirContent: string[],
+  ): Promise<string[]> {
     if (this.nextHandler) {
       return await this.nextHandler.handle(request, dirContent);
     }
-    return [];
+    return dirContent;
   }
 }

@@ -11,7 +11,7 @@ export class RemoveFiles implements IRemove {
     this.filterState = [];
   }
 
-  fromDirectory(dirPath: string): IRemoveBy {
+  from(dirPath: string): IRemoveBy {
     this.filterState.push(new DirFilter(dirPath));
     return new RemoveBy(this.filterState);
   }

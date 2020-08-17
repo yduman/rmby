@@ -1,3 +1,5 @@
+import { FilterState } from "../filters/filter-interface";
+import { TFilter, ExtFilter, NFilter } from "../filters/filters";
 import {
   IRemoveBy,
   IRemoveByTimeUnit,
@@ -5,17 +7,16 @@ import {
   IRemoveRunOrConcat,
   IRemoveByTime,
 } from "./api-interface";
-import { FilterState } from "../filters/filter-interface";
-import { TimeUnit } from "../utils/timeUtils";
-import { TFilter, ExtFilter, NFilter } from "../filters/filters";
-import { NameUnit, isEqual, startsWith, endsWith, includes } from "../utils/nameUtils";
 import {
-  DirectoryFilterHandler,
-  TimeFilterHandler,
-  NameFilterHandler,
-  ExtensionFilterHandler,
-} from "../handler/conrete-handlers";
-import { unlink } from "../asyncFs";
+  TimeUnit,
+  isEqual,
+  startsWith,
+  endsWith,
+  includes,
+  removeFiles,
+  getDirectoryContent,
+  initHandlers,
+} from "../utils";
 
 export class RemoveBy implements IRemoveBy {
   private filterState: FilterState[];
@@ -85,22 +86,22 @@ class RemoveByName implements IRemoveByName {
   }
 
   thatEqualsTo(nameValue: string): IRemoveRunOrConcat {
-    this.filterState.push(new NFilter(NameUnit.EQUAL_TO, nameValue, isEqual));
+    this.filterState.push(new NFilter(nameValue, isEqual));
     return new RemoveRunOrConcat(this.filterState);
   }
 
   thatStartsWith(nameValue: string): IRemoveRunOrConcat {
-    this.filterState.push(new NFilter(NameUnit.STARTS_WITH, nameValue, startsWith));
+    this.filterState.push(new NFilter(nameValue, startsWith));
     return new RemoveRunOrConcat(this.filterState);
   }
 
   thatEndsWith(nameValue: string): IRemoveRunOrConcat {
-    this.filterState.push(new NFilter(NameUnit.ENDS_WITH, nameValue, endsWith));
+    this.filterState.push(new NFilter(nameValue, endsWith));
     return new RemoveRunOrConcat(this.filterState);
   }
 
   thatIncludes(nameValue: string): IRemoveRunOrConcat {
-    this.filterState.push(new NFilter(NameUnit.INCLUDES, nameValue, includes));
+    this.filterState.push(new NFilter(nameValue, includes));
     return new RemoveRunOrConcat(this.filterState);
   }
 }
@@ -117,26 +118,15 @@ class RemoveRunOrConcat implements IRemoveRunOrConcat {
   }
 
   async run(): Promise<string[]> {
-    const fromDirHandler = new DirectoryFilterHandler();
-    const byTimeHandler = new TimeFilterHandler();
-    const byNameHandler = new NameFilterHandler();
-    const byExtensionHandler = new ExtensionFilterHandler();
-
-    fromDirHandler.setNext(byTimeHandler).setNext(byNameHandler).setNext(byExtensionHandler);
-
     let filteredFiles: string[] = [];
+    const handlers = initHandlers();
+    const dirContent = await getDirectoryContent(this.filterState);
+
     for (const filter of this.filterState) {
-      const result = await fromDirHandler.handle(filter, filteredFiles);
-      // TODO: diff the results
-      filteredFiles = result;
+      filteredFiles = await handlers.handle(filter, dirContent);
     }
 
-    const deletedFiles: string[] = [];
-    for (const file of filteredFiles) {
-      await unlink(file);
-      deletedFiles.push(file);
-    }
-
-    return deletedFiles;
+    const removedFiles = await removeFiles(filteredFiles);
+    return removedFiles;
   }
 }
