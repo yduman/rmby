@@ -92,20 +92,20 @@ async function remove(removeArgs: RemoveArgs): Promise<string[]> {
   }
 }
 
-function isEqual(args: PredicateArgs) {
-  return args.nameValue === args.fileName;
+export function isEqual(args: PredicateArgs): boolean {
+  return getRawFilename(args.fileName) === args.nameValue;
 }
 
-function startsWith(args: PredicateArgs) {
-  return args.fileName.startsWith(args.nameValue);
+export function startsWith(args: PredicateArgs): boolean {
+  return getRawFilename(args.fileName).startsWith(args.nameValue);
 }
 
-function endsWith(args: PredicateArgs) {
-  return args.fileName.endsWith(args.nameValue);
+export function endsWith(args: PredicateArgs): boolean {
+  return getRawFilename(args.fileName).endsWith(args.nameValue);
 }
 
-function includes(args: PredicateArgs) {
-  return args.fileName.includes(args.nameValue);
+export function includes(args: PredicateArgs): boolean {
+  return getRawFilename(args.fileName).includes(args.nameValue);
 }
 
 function getRawFilename(fsObject: string): string {

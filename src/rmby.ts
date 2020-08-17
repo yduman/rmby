@@ -1,36 +1,18 @@
-import { RemoveByTime } from "./builder/RemoveByTime";
-import { RemoveByName } from "./builder/RemoveByName";
-import { RemoveByExtension } from "./builder/RemoveByExtension";
-import { TimeUnit } from "./utils/timeUtils";
+import { IRemove } from "./api/api-interface";
+import { IRemoveBy } from "./api/api-interface";
+import { FilterState } from "./filters/filter-interface";
+import { RemoveBy } from "./api/api";
+import { DirFilter } from "./filters/filters";
 
-export class Remove {
-  private dirPath: string;
+export class RemoveFiles implements IRemove {
+  private filterState: FilterState[] = [];
 
-  constructor(dirPath: string) {
-    this.dirPath = dirPath;
+  constructor() {
+    this.filterState = [];
   }
 
-  byMilliseconds(): RemoveByTime {
-    return new RemoveByTime(this.dirPath, TimeUnit.MILLIS);
-  }
-
-  bySeconds(): RemoveByTime {
-    return new RemoveByTime(this.dirPath, TimeUnit.SECONDS);
-  }
-
-  byMinutes(): RemoveByTime {
-    return new RemoveByTime(this.dirPath, TimeUnit.MINUTES);
-  }
-
-  byHours(): RemoveByTime {
-    return new RemoveByTime(this.dirPath, TimeUnit.HOURS);
-  }
-
-  byName(): RemoveByName {
-    return new RemoveByName(this.dirPath);
-  }
-
-  byExtension(): RemoveByExtension {
-    return new RemoveByExtension(this.dirPath);
+  fromDirectory(dirPath: string): IRemoveBy {
+    this.filterState.push(new DirFilter(dirPath));
+    return new RemoveBy(this.filterState);
   }
 }
