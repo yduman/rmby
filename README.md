@@ -5,15 +5,16 @@
 [![codecov](https://codecov.io/gh/yduman/rmby/branch/master/graph/badge.svg)](https://codecov.io/gh/yduman/rmby)
 ![NPM](https://img.shields.io/npm/l/rmby)
 
-rmby ("remove by") is a Node.js library with a fluent interface for removing files asynchronously by certain aspects.
+rmby ("remove by") is a zero-dependency Node.js library with a fluent interface for removing files asynchronously by certain aspects.
 
 - [rmby](#rmby)
   - [Installation](#installation)
   - [Usage](#usage)
   - [API](#api)
-    - [Remove files by time](#remove-files-by-time)
-    - [Remove files by name](#remove-files-by-name)
-    - [Remove files by file extension](#remove-files-by-file-extension)
+    - [Remove Files By Time](#remove-files-by-time)
+    - [Remove Files By Name](#remove-files-by-name)
+    - [Remove Files By Extension](#remove-files-by-extension)
+    - [Remove Files By Combination](#remove-files-by-combination)
   - [Development](#development)
   - [Testing](#testing)
   - [Philosophy](#philosophy)
@@ -31,46 +32,67 @@ $ yarn add rmby
 
 ## Usage
 
-The `Remove` class is all you need. You can navigate yourself through the API by chaining methods, since the API follows the builder pattern. On the [API section](#api) you can see more details about the usage.
+The `RemoveFiles` class is all you need. You can navigate yourself through the API by chaining methods, since the API provides a [fluent interface](https://martinfowler.com/bliki/FluentInterface.html). On the [API section](#api) you can see more details about the usage.
 
 ```js
 // JavaScript
-const { Remove } = require("rmby");
+const { RemoveFiles } = require("rmby");
 
 // TypeScript
-import { Remove } from "rmby";
+import { RemoveFiles } from "rmby";
 ```
 
 ## API
 
-The last method of the fluent API returns always a `Promise<string[]>` containing every filepath that has been removed.
+In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria's and will return a `Promise<string[]>` containing every file path that has been removed.
 
-### Remove files by time
+### Remove Files By Time
 
-Files can be deleted by a time difference in milliseconds, seconds, minutes and hours. The time difference is always checked against the current time.
+Files can be removed by a time difference in milliseconds, seconds, minutes or hours. The time difference is always checked against the current time.
 
 ```js
-async () => await new Remove("/path/to/dir").byMilliseconds().olderThan(500);
-async () => await new Remove("/path/to/dir").bySeconds().olderThan(30);
-async () => await new Remove("/path/to/dir").byMinutes().olderThan(5);
-async () => await new Remove("/path/to/dir").byHours().olderThan(2);
+// Remove all files that are older than 12 hours
+async () =>
+  await new RemoveFiles().from("/some/path/to/dir").byTime().inHours().olderThan(12).run();
 ```
 
-### Remove files by name
+### Remove Files By Name
 
-Files can be deleted regarding its name without the file extension. Delete files that match exactly, start with, end with, or include the name that you provide.
+Files can be removed regarding its name without considering the file extension. You can remove files that match exactly, start with, end with, or include the name that you provide.
 
 ```js
-async () => await new Remove("/path/to/dir").byName().thatEquals("filename");
-async () => await new Remove("/path/to/dir").byName().thatStartsWith("file");
-async () => await new Remove("/path/to/dir").byName().thatEndsWith("name");
-async () => await new Remove("/path/to/dir").byName().thatIncludes("lena");
+// Remove all files that start with "React"
+async () =>
+  await new RemoveFiles().from("/some/path/to/dir").byName().thatStartsWith("React").run();
 ```
 
-### Remove files by file extension
+### Remove Files By Extension
+
+Files can be removed regarding their file extension. You can remove files that match exactly with the extension you provide.
 
 ```js
-async () => await new Remove("/path/to/dir").byExtension().thatEquals(".txt");
+// Remove all .log files
+async () => await new RemoveFiles().from("/some/path/to/dir").byExtension(".log").run();
+```
+
+### Remove Files By Combination
+
+Files can be removed by combining the available filters. Therefore you can create more specific filters for your remove use case.
+
+```js
+// Remove all JS files that start with "f" and are older than 12 hours
+async () =>
+  await new RemoveFiles()
+    .from("/some/path/to/dir")
+    .byName()
+    .thatStartsWith("f")
+    .and()
+    .byExtension(".js")
+    .and()
+    .byTime()
+    .inHours()
+    .olderThan(12)
+    .run();
 ```
 
 ## Development
@@ -79,7 +101,7 @@ rmby is developed with [TypeScript](https://www.typescriptlang.org/). The `maste
 
 ## Testing
 
-rmby is using [Jest](https://jestjs.io/) as a JavaScript Testing Framework. For testing, run `npm test`. For code coverage, run `npm run test:cov`. The goal is to stick with 100% code coverage.
+rmby is using [Jest](https://jestjs.io/) as a JavaScript Testing Framework. For testing, run `npm test`. For code coverage, run `npm run test:cov`. We have currently 100% code coverage and aim to stick with it.
 
 ## Philosophy
 

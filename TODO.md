@@ -17,3 +17,4 @@
 - [x] byExtension
   - [x] thatEquals
 - [ ] recursively
+- [x] combinations
