@@ -19,22 +19,22 @@
 - `run()` needs to be called at the end of the chain in order to execute removal
 
 ```js
-import { RemoveFile } from "rmby";
+import { RemoveFiles } from "rmby";
 
 // Remove By Time
-new RemoveFile().from("/some/dir").byTime().inMilliseconds().olderThan(1200).run();
-new RemoveFile().from("/some/dir").byTime().inSeconds().olderThan(90).run();
-new RemoveFile().from("/some/dir").byTime().inMinutes().olderThan(150).run();
-new RemoveFile().from("/some/dir").byTime().inHours().olderThan(18).run();
+new RemoveFiles().from("/some/dir").byTime().inMilliseconds().olderThan(1200).run();
+new RemoveFiles().from("/some/dir").byTime().inSeconds().olderThan(90).run();
+new RemoveFiles().from("/some/dir").byTime().inMinutes().olderThan(150).run();
+new RemoveFiles().from("/some/dir").byTime().inHours().olderThan(18).run();
 
 // Remove By Name
-new RemoveFile().from("/some/dir").byName().thatEqualsTo("index").run();
-new RemoveFile().from("/some/dir").byName().thatStartsWith("ind").run();
-new RemoveFile().from("/some/dir").byName().thatEndsWith("dex").run();
-new RemoveFile().from("/some/dir").byName().thatIncludes("nde").run();
+new RemoveFiles().from("/some/dir").byName().thatEqualsTo("index").run();
+new RemoveFiles().from("/some/dir").byName().thatStartsWith("ind").run();
+new RemoveFiles().from("/some/dir").byName().thatEndsWith("dex").run();
+new RemoveFiles().from("/some/dir").byName().thatIncludes("nde").run();
 
 // Remove By Extension
-new RemoveFile().from("/some/dir").byExtension(".js");
+new RemoveFiles().from("/some/dir").byExtension(".js");
 
 // Remove By Combination
 new RemoveFiles()
