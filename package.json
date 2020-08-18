@@ -1,7 +1,7 @@
 {
   "name": "rmby",
   "version": "1.0.0",
-  "description": "A zero-dependency library with a fluent interface for removing files asynchronously by certain aspects",
+  "description": "A zero-dependency library with a fluent interface for removing files asynchronously by certain filters",
   "author": "Yadullah Duman",
   "license": "MIT",
   "main": "lib/rmby.js",
@@ -25,7 +25,8 @@
     "delete",
     "unlink",
     "readdir",
-    "stat"
+    "stat",
+    "promises"
   ],
   "scripts": {
     "build": "tsc",

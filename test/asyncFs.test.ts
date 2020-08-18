@@ -1,13 +1,11 @@
 import fs from "fs";
 import path from "path";
 import tempy from "tempy";
-import { promisify } from "util";
 
 import { readdir, stat, unlink } from "../src/asyncFs";
 
-const open = promisify(fs.open);
-const close = promisify(fs.close);
-const access = promisify(fs.access);
+const open = fs.promises.open;
+const access = fs.promises.access;
 const WRITE_FLAG = "w";
 
 describe("asyncFs", () => {
@@ -17,7 +15,7 @@ describe("asyncFs", () => {
     const fileName = "file-tmp.txt";
     const filePath = path.join(dirPath, fileName);
     const file = await open(filePath, WRITE_FLAG);
-    await close(file);
+    await file.close();
 
     // act
     const dirChildren = await readdir(dirPath);
@@ -30,7 +28,7 @@ describe("asyncFs", () => {
     // arrange
     const filePath = tempy.file();
     const file = await open(filePath, WRITE_FLAG);
-    await close(file);
+    await file.close();
 
     // act
     const stats = await stat(filePath);
@@ -43,7 +41,7 @@ describe("asyncFs", () => {
     // arrange
     const filePath = tempy.file();
     const file = await open(filePath, WRITE_FLAG);
-    await close(file);
+    await file.close();
     expect(access(filePath, fs.constants.F_OK)).resolves;
 
     // act
