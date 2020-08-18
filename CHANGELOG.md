@@ -10,6 +10,30 @@
 
 ### Removed
 
+## [1.0.1] - 2020-08-18
+
+### Added
+
+### Changed
+
+- Making use of `fs.promises` instead of `promisify`
+
+```diff
+import fs from "fs";
+- import { promisify } from "util";
+
+- export const readdir = promisify(fs.readdir);
++ export const readdir = fs.promises.readdir;
+- export const stat = promisify(fs.stat);
++ export const stat = fs.promises.stat;
+- export const unlink = promisify(fs.unlink);
++ export const unlink = fs.promises.unlink;
+```
+
+### Fixed
+
+### Removed
+
 ## [1.0.0] - 2020-08-17
 
 ### Added
@@ -120,8 +144,9 @@ new RemoveFiles()
 
 - Tests for `calcTimeDiff`, since it is no longer exported and is tested implicitly anyway
 
-[unreleased]: https://github.com/yduman/rmby/compare/1.0.0...master
+[unreleased]: https://github.com/yduman/rmby/compare/1.0.1...master
 [0.0.2]: https://github.com/yduman/rmby/releases/tag/0.0.2
 [0.0.3]: https://github.com/yduman/rmby/releases/tag/0.0.3
 [0.1.0]: https://github.com/yduman/rmby/releases/tag/0.1.0
 [1.0.0]: https://github.com/yduman/rmby/releases/tag/1.0.0
+[1.0.1]: https://github.com/yduman/rmby/releases/tag/1.0.1
