@@ -9,15 +9,7 @@ jest.mock("../src/asyncFs", () => ({
 }));
 
 const dirPath = "/path/to/dir";
-const dirContent = [
-  "file1.txt",
-  "file2.css",
-  "dir1",
-  "dir2",
-  "file3.html",
-  "file4.js",
-  "file5.js",
-];
+const dirContent = ["file1.txt", "file2.css", "dir1", "dir2", "file3.html", "file4.js", "file5.js"];
 const file1 = "/path/to/dir/file1.txt";
 const file2 = "/path/to/dir/file2.css";
 const file3 = "/path/to/dir/file3.html";
@@ -57,9 +49,7 @@ describe("Remove By Time Tests", () => {
       },
     };
     (readdir as any).mockResolvedValue(dirContent);
-    (stat as any).mockImplementation((fileName: string) =>
-      Promise.resolve(stats[fileName]),
-    );
+    (stat as any).mockImplementation((fileName: string) => Promise.resolve(stats[fileName]));
   });
 
   afterEach(() => {
@@ -166,10 +156,7 @@ describe("Remove By Time Tests", () => {
 
   it("should throw exception if unlink() goes wrong", async () => {
     (unlink as any).mockImplementationOnce(
-      (
-        filename: string,
-        callback: (err: NodeJS.ErrnoException | null) => void,
-      ) => {
+      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
         callback(new Error());
       },
     );

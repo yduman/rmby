@@ -10,10 +10,7 @@ import {
 } from "../filters/filter-interface";
 
 export class TimeFilterHandler extends AbstractHandler {
-  public async handle(
-    request: FilterState,
-    dirContent: string[],
-  ): Promise<string[]> {
+  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isTimeFilter(request)) {
       const { timeUnit, threshold } = request;
       const matchedFiles: string[] = [];
@@ -35,10 +32,7 @@ export class TimeFilterHandler extends AbstractHandler {
 }
 
 export class NameFilterHandler extends AbstractHandler {
-  public async handle(
-    request: FilterState,
-    dirContent: string[],
-  ): Promise<string[]> {
+  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isNameFilter(request)) {
       const { nameValue, nameFilterer } = request;
       const matchedFiles: string[] = [];
@@ -56,10 +50,7 @@ export class NameFilterHandler extends AbstractHandler {
 }
 
 export class ExtensionFilterHandler extends AbstractHandler {
-  public async handle(
-    request: FilterState,
-    dirContent: string[],
-  ): Promise<string[]> {
+  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isExtensionFilter(request)) {
       const { fileExtension } = request;
       const matchedFiles: string[] = [];

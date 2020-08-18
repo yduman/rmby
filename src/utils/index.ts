@@ -1,9 +1,5 @@
 import { join, parse } from "path";
-import {
-  NameFiltererArgs,
-  FilterState,
-  isDirFilter,
-} from "../filters/filter-interface";
+import { NameFiltererArgs, FilterState, isDirFilter } from "../filters/filter-interface";
 import { unlink, readdir } from "../asyncFs";
 import { AbstractHandler } from "../handler/handler";
 import {
@@ -43,9 +39,7 @@ export async function removeFiles(filteredFiles: string[]): Promise<string[]> {
   return removedFiles;
 }
 
-export async function getDirectoryContent(
-  filterState: FilterState[],
-): Promise<string[]> {
+export async function getDirectoryContent(filterState: FilterState[]): Promise<string[]> {
   const dirContentWithFullPaths: string[] = [];
   const dirPath = getDirPath(filterState);
   const dirContent = await readdir(dirPath);
@@ -70,10 +64,7 @@ export function getDirPath(filterState: FilterState[]): string {
   return dirPath;
 }
 
-export function getTimeDiff(
-  timeUnit: TimeUnit,
-  lastModifiedTime: Date,
-): number {
+export function getTimeDiff(timeUnit: TimeUnit, lastModifiedTime: Date): number {
   let diff;
 
   switch (timeUnit) {

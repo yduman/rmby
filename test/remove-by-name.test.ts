@@ -9,15 +9,7 @@ jest.mock("../src/asyncFs", () => ({
 }));
 
 const dirPath = "/path/to/dir";
-const dirContent = [
-  "file1.txt",
-  "file2.css",
-  "dir1",
-  "dir2",
-  "file3.html",
-  "file4.js",
-  "file5.js",
-];
+const dirContent = ["file1.txt", "file2.css", "dir1", "dir2", "file3.html", "file4.js", "file5.js"];
 const file1 = "/path/to/dir/file1.txt";
 const file2 = "/path/to/dir/file2.css";
 const file3 = "/path/to/dir/file3.html";
@@ -66,19 +58,14 @@ describe("Remove By Name Tests", () => {
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
 
-      expect(
-        new RemoveFiles().from(dirPath).byName().thatEqualsTo("foo").run(),
-      ).rejects.toThrow();
+      expect(new RemoveFiles().from(dirPath).byName().thatEqualsTo("foo").run()).rejects.toThrow();
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).not.toHaveBeenCalled();
     });
 
     it("should throw exception if unlink() goes wrong", async () => {
       (unlink as any).mockImplementationOnce(
-        (
-          filename: string,
-          callback: (err: NodeJS.ErrnoException | null) => void,
-        ) => {
+        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
           callback(new Error());
         },
       );
@@ -135,10 +122,7 @@ describe("Remove By Name Tests", () => {
 
     it("should throw exception if unlink() goes wrong", async () => {
       (unlink as any).mockImplementationOnce(
-        (
-          filename: string,
-          callback: (err: NodeJS.ErrnoException | null) => void,
-        ) => {
+        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
           callback(new Error());
         },
       );
@@ -153,11 +137,7 @@ describe("Remove By Name Tests", () => {
 
   describe("thatEndsWith()", () => {
     it("should remove all files that end with the provided name", async () => {
-      const deletedFiles = await new RemoveFiles()
-        .from(dirPath)
-        .byName()
-        .thatEndsWith("3")
-        .run();
+      const deletedFiles = await new RemoveFiles().from(dirPath).byName().thatEndsWith("3").run();
 
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledTimes(1);
@@ -168,11 +148,7 @@ describe("Remove By Name Tests", () => {
     });
 
     it("should return empty array and do nothing if no filename ends with provided name", async () => {
-      const deletedFiles = await new RemoveFiles()
-        .from(dirPath)
-        .byName()
-        .thatEndsWith("xxx")
-        .run();
+      const deletedFiles = await new RemoveFiles().from(dirPath).byName().thatEndsWith("xxx").run();
 
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).not.toHaveBeenCalled();
@@ -182,19 +158,14 @@ describe("Remove By Name Tests", () => {
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
 
-      expect(
-        new RemoveFiles().from(dirPath).byName().thatEndsWith("foo").run(),
-      ).rejects.toThrow();
+      expect(new RemoveFiles().from(dirPath).byName().thatEndsWith("foo").run()).rejects.toThrow();
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).not.toHaveBeenCalled();
     });
 
     it("should throw exception if unlink() goes wrong", async () => {
       (unlink as any).mockImplementationOnce(
-        (
-          filename: string,
-          callback: (err: NodeJS.ErrnoException | null) => void,
-        ) => {
+        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
           callback(new Error());
         },
       );
@@ -209,11 +180,7 @@ describe("Remove By Name Tests", () => {
 
   describe("thatIncludes()", () => {
     it("should remove all files that that include the provided name", async () => {
-      const deletedFiles = await new RemoveFiles()
-        .from(dirPath)
-        .byName()
-        .thatIncludes("ile")
-        .run();
+      const deletedFiles = await new RemoveFiles().from(dirPath).byName().thatIncludes("ile").run();
 
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledTimes(5);
@@ -228,11 +195,7 @@ describe("Remove By Name Tests", () => {
     });
 
     it("should return empty array and do nothing if no filename includes the provided name", async () => {
-      const deletedFiles = await new RemoveFiles()
-        .from(dirPath)
-        .byName()
-        .thatIncludes("xxx")
-        .run();
+      const deletedFiles = await new RemoveFiles().from(dirPath).byName().thatIncludes("xxx").run();
 
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).not.toHaveBeenCalled();
@@ -242,19 +205,14 @@ describe("Remove By Name Tests", () => {
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
 
-      expect(
-        new RemoveFiles().from(dirPath).byName().thatIncludes("foo").run(),
-      ).rejects.toThrow();
+      expect(new RemoveFiles().from(dirPath).byName().thatIncludes("foo").run()).rejects.toThrow();
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).not.toHaveBeenCalled();
     });
 
     it("should throw exception if unlink() goes wrong", async () => {
       (unlink as any).mockImplementationOnce(
-        (
-          filename: string,
-          callback: (err: NodeJS.ErrnoException | null) => void,
-        ) => {
+        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
           callback(new Error());
         },
       );

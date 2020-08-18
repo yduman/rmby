@@ -9,15 +9,7 @@ jest.mock("../src/asyncFs", () => ({
 }));
 
 const dirPath = "/path/to/dir";
-const dirContent = [
-  "file1.txt",
-  "file2.css",
-  "dir1",
-  "dir2",
-  "file3.html",
-  "file4.js",
-  "file5.js",
-];
+const dirContent = ["file1.txt", "file2.css", "dir1", "dir2", "file3.html", "file4.js", "file5.js"];
 const file1 = "/path/to/dir/file1.txt";
 
 describe("Remove By File Extension Tests", () => {
@@ -30,10 +22,7 @@ describe("Remove By File Extension Tests", () => {
   });
 
   it("should remove all files that equal to provided file extension", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byExtension(".txt")
-      .run();
+    const deletedFiles = await new RemoveFiles().from(dirPath).byExtension(".txt").run();
 
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledTimes(1);
@@ -42,10 +31,7 @@ describe("Remove By File Extension Tests", () => {
   });
 
   it("should return empty array and do nothing if name is not equal", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byExtension(".java")
-      .run();
+    const deletedFiles = await new RemoveFiles().from(dirPath).byExtension(".java").run();
 
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
@@ -55,26 +41,19 @@ describe("Remove By File Extension Tests", () => {
   it("should throw exception if readdir() goes wrong", async () => {
     (readdir as any).mockResolvedValue(new Error());
 
-    expect(
-      new RemoveFiles().from(dirPath).byExtension(".java").run(),
-    ).rejects.toThrow();
+    expect(new RemoveFiles().from(dirPath).byExtension(".java").run()).rejects.toThrow();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
   });
 
   it("should throw exception if unlink() goes wrong", async () => {
     (unlink as any).mockImplementationOnce(
-      (
-        filename: string,
-        callback: (err: NodeJS.ErrnoException | null) => void,
-      ) => {
+      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
         callback(new Error());
       },
     );
 
-    await expect(
-      new RemoveFiles().from(dirPath).byExtension(".txt").run(),
-    ).rejects.toBeTruthy();
+    await expect(new RemoveFiles().from(dirPath).byExtension(".txt").run()).rejects.toBeTruthy();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledTimes(1);
   });

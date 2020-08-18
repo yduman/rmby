@@ -9,15 +9,7 @@ jest.mock("../src/asyncFs", () => ({
 }));
 
 const dirPath = "/path/to/dir";
-const dirContent = [
-  "file1.txt",
-  "file2.css",
-  "dir1",
-  "dir2",
-  "file3.html",
-  "file4.js",
-  "file5.js",
-];
+const dirContent = ["file1.txt", "file2.css", "dir1", "dir2", "file3.html", "file4.js", "file5.js"];
 const file5 = "/path/to/dir/file5.js";
 
 describe("Remove By Combination Tests", () => {
@@ -51,9 +43,7 @@ describe("Remove By Combination Tests", () => {
       },
     };
     (readdir as any).mockResolvedValue(dirContent);
-    (stat as any).mockImplementation((fileName: string) =>
-      Promise.resolve(stats[fileName]),
-    );
+    (stat as any).mockImplementation((fileName: string) => Promise.resolve(stats[fileName]));
   });
 
   afterEach(() => {
