@@ -29,7 +29,7 @@ export function initHandlers(): AbstractHandler {
 }
 
 export async function removeFiles(filteredFiles: string[]): Promise<string[]> {
-  const removedFiles: string[] = [];
+  await Promise.all(filteredFiles.map((fileName) => unlink(fileName)))  const removedFiles: string[] = [];
 
   for (const file of filteredFiles) {
     await unlink(file);
@@ -126,4 +126,7 @@ function getDiffMinutes(laterDate: Date, earlierDate: Date): number {
 function getDiffHours(laterDate: Date, earlierDate: Date): number {
   const diff = getDiffMillis(laterDate, earlierDate) / MS_IN_HOUR;
   return Math.floor(diff);
+
+function getRawFilename(fsObject: string): string {
+  return parse(fsObject).name;
 }
