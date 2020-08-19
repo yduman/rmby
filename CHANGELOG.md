@@ -10,29 +10,21 @@
 
 ### Removed
 
-## [1.0.1] - 2020-08-18
+## [1.0.2] - 2020-08-19
 
-### Added
+### Changed
+
+- Simplified time difference calculation
+
+### Fixed
+
+- Making proper use of `Promise.all`
+
+## [1.0.1] - 2020-08-18
 
 ### Changed
 
 - Making use of `fs.promises` instead of `promisify`
-
-```diff
-import fs from "fs";
-- import { promisify } from "util";
-
-- export const readdir = promisify(fs.readdir);
-+ export const readdir = fs.promises.readdir;
-- export const stat = promisify(fs.stat);
-+ export const stat = fs.promises.stat;
-- export const unlink = promisify(fs.unlink);
-+ export const unlink = fs.promises.unlink;
-```
-
-### Fixed
-
-### Removed
 
 ## [1.0.0] - 2020-08-17
 
@@ -78,10 +70,6 @@ new RemoveFiles()
 
 - Re-organized tests for more modularity
 
-### Fixed
-
---
-
 ### Removed
 
 - Replaced/Removed API state of [0.1.0]
@@ -91,18 +79,6 @@ new RemoveFiles()
 ### Added
 
 - `byExtension().thatEquals(string)`
-
-### Changed
-
---
-
-### Fixed
-
---
-
-### Removed
-
---
 
 ## [0.0.3] - 2020-08-15
 
@@ -116,14 +92,6 @@ new RemoveFiles()
 
 - `byName().equalTo(string)` is now `byName().thatEquals(string)` to conform the rest of the `byName()` API
 
-### Fixed
-
---
-
-### Removed
-
---
-
 ## [0.0.2] - 2020-08-15
 
 ### Added
@@ -136,17 +104,14 @@ new RemoveFiles()
 
 - `calcTimeDiff` is no longer exported
 
-### Fixed
-
---
-
 ### Removed
 
 - Tests for `calcTimeDiff`, since it is no longer exported and is tested implicitly anyway
 
-[unreleased]: https://github.com/yduman/rmby/compare/1.0.1...master
+[unreleased]: https://github.com/yduman/rmby/compare/1.0.2...master
 [0.0.2]: https://github.com/yduman/rmby/releases/tag/0.0.2
 [0.0.3]: https://github.com/yduman/rmby/releases/tag/0.0.3
 [0.1.0]: https://github.com/yduman/rmby/releases/tag/0.1.0
 [1.0.0]: https://github.com/yduman/rmby/releases/tag/1.0.0
 [1.0.1]: https://github.com/yduman/rmby/releases/tag/1.0.1
+[1.0.2]: https://github.com/yduman/rmby/releases/tag/1.0.2
