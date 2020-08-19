@@ -1,6 +1,6 @@
 {
   "name": "rmby",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A zero-dependency library with a fluent interface for removing files asynchronously by certain filters",
   "author": "Yadullah Duman",
   "license": "MIT",
