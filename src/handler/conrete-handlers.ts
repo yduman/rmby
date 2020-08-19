@@ -10,15 +10,17 @@ import {
 } from "../filters/filter-interface";
 
 export class TimeFilterHandler extends AbstractHandler {
-  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
+  async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isTimeFilter(request)) {
       const { timeUnit, threshold } = request;
       const matchedFiles: string[] = [];
 
-      for (const fsObjectPath of dirContent) {
-        const stats = await stat(fsObjectPath);
-        if (stats.isFile()) {
-          const diff = getTimeDiff(timeUnit, stats.mtime);
+      const stats = await Promise.all(dirContent.map((fsObjectPath) => stat(fsObjectPath)));
+      for (let i = 0; i < dirContent.length; i++) {
+        const fsObjectPath = dirContent[i];
+        const stat = stats[i];
+        if (stat.isFile()) {
+          const diff = getTimeDiff(timeUnit, stat.mtime);
           if (diff >= threshold) {
             matchedFiles.push(fsObjectPath);
           }
@@ -27,12 +29,12 @@ export class TimeFilterHandler extends AbstractHandler {
 
       return filter(dirContent, matchedFiles);
     }
-    return await super.handle(request, dirContent);
+    return super.handle(request, dirContent);
   }
 }
 
 export class NameFilterHandler extends AbstractHandler {
-  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
+  async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isNameFilter(request)) {
       const { nameValue, nameFilterer } = request;
       const matchedFiles: string[] = [];
@@ -45,12 +47,12 @@ export class NameFilterHandler extends AbstractHandler {
 
       return filter(dirContent, matchedFiles);
     }
-    return await super.handle(request, dirContent);
+    return super.handle(request, dirContent);
   }
 }
 
 export class ExtensionFilterHandler extends AbstractHandler {
-  public async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
+  async handle(request: FilterState, dirContent: string[]): Promise<string[]> {
     if (isExtensionFilter(request)) {
       const { fileExtension } = request;
       const matchedFiles: string[] = [];
@@ -64,6 +66,6 @@ export class ExtensionFilterHandler extends AbstractHandler {
 
       return filter(dirContent, matchedFiles);
     }
-    return await super.handle(request, dirContent);
+    return super.handle(request, dirContent);
   }
 }

@@ -144,7 +144,11 @@ describe("Remove By Time Tests", () => {
   });
 
   it("should throw exception if stat() goes wrong", async () => {
-    (stat as any).mockResolvedValue(new Error());
+    (stat as any).mockImplementationOnce(
+      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
+        callback(new Error());
+      },
+    );
 
     await expect(
       new RemoveFiles().from(dirPath).byTime().inHours().olderThan(1).run(),

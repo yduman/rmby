@@ -126,7 +126,6 @@ class RemoveRunOrConcat implements IRemoveRunOrConcat {
       filteredFiles = await handlers.handle(filter, dirContent);
     }
 
-    const removedFiles = await removeFiles(filteredFiles);
-    return removedFiles;
+    return await removeFiles(filteredFiles);
   }
 }

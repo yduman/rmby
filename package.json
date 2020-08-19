@@ -14,7 +14,9 @@
     "url": "https://github.com/yduman/rmby.git"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "README.md",
+    "LICENSE"
   ],
   "keywords": [
     "file",

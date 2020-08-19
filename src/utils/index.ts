@@ -8,8 +8,10 @@ import {
   ExtensionFilterHandler,
 } from "../handler/conrete-handlers";
 
-const MS_IN_SECS = 60000;
-const MS_IN_HOUR = 3600000;
+const MS = 1;
+const SEC_IN_MS = MS * 1000;
+const MIN_IN_MS = SEC_IN_MS * 60;
+const HOUR_IN_MS = MIN_IN_MS * 60;
 
 export enum TimeUnit {
   MILLIS,
@@ -29,14 +31,8 @@ export function initHandlers(): AbstractHandler {
 }
 
 export async function removeFiles(filteredFiles: string[]): Promise<string[]> {
-  const removedFiles: string[] = [];
-
-  for (const file of filteredFiles) {
-    await unlink(file);
-    removedFiles.push(file);
-  }
-
-  return removedFiles;
+  await Promise.all(filteredFiles.map((file) => unlink(file)));
+  return filteredFiles;
 }
 
 export async function getDirectoryContent(filterState: FilterState[]): Promise<string[]> {
@@ -58,35 +54,26 @@ export function getDirPath(filterState: FilterState[]): string {
   for (const filter of filterState) {
     if (isDirFilter(filter)) {
       dirPath = filter.dirPath;
+      break;
     }
   }
 
   return dirPath;
 }
 
-export function getTimeDiff(timeUnit: TimeUnit, lastModifiedTime: Date): number {
-  let diff;
+export function getTimeDiff(timeUnit: TimeUnit, lastModifiedDate: Date): number {
+  const timeDiff = {
+    [TimeUnit.MILLIS]: { diff: calcTimeDiff, timeUnitInMs: MS },
+    [TimeUnit.SECONDS]: { diff: calcTimeDiff, timeUnitInMs: SEC_IN_MS },
+    [TimeUnit.MINUTES]: { diff: calcTimeDiff, timeUnitInMs: MIN_IN_MS },
+    [TimeUnit.HOURS]: { diff: calcTimeDiff, timeUnitInMs: HOUR_IN_MS },
+  }[timeUnit];
 
-  switch (timeUnit) {
-    case TimeUnit.MILLIS:
-      diff = getDiffMillis(new Date(), lastModifiedTime);
-      break;
-    case TimeUnit.SECONDS:
-      diff = getDiffSeconds(new Date(), lastModifiedTime);
-      break;
-    case TimeUnit.MINUTES:
-      diff = getDiffMinutes(new Date(), lastModifiedTime);
-      break;
-    case TimeUnit.HOURS:
-      diff = getDiffHours(new Date(), lastModifiedTime);
-      break;
-  }
-
-  return diff;
+  return timeDiff.diff(lastModifiedDate, timeDiff.timeUnitInMs);
 }
 
-export function filter(dirContent: string[], matchedFiles: string[]): string[] {
-  return dirContent.filter((x) => matchedFiles.includes(x));
+function calcTimeDiff(lastModifiedDate: Date, timeUnitInMs: number): number {
+  return Math.floor((new Date().getTime() - lastModifiedDate.getTime()) / timeUnitInMs);
 }
 
 export function isEqual(args: NameFiltererArgs): boolean {
@@ -109,21 +96,6 @@ function getRawFilename(fsObject: string): string {
   return parse(fsObject).name;
 }
 
-function getDiffMillis(laterDate: Date, earlierDate: Date): number {
-  return laterDate.getTime() - earlierDate.getTime();
-}
-
-function getDiffSeconds(laterDate: Date, earlierDate: Date): number {
-  const diff = getDiffMillis(laterDate, earlierDate) / 1000;
-  return Math.floor(diff);
-}
-
-function getDiffMinutes(laterDate: Date, earlierDate: Date): number {
-  const diff = getDiffMillis(laterDate, earlierDate) / MS_IN_SECS;
-  return Math.floor(diff);
-}
-
-function getDiffHours(laterDate: Date, earlierDate: Date): number {
-  const diff = getDiffMillis(laterDate, earlierDate) / MS_IN_HOUR;
-  return Math.floor(diff);
+export function filter(dirContent: string[], matchedFiles: string[]): string[] {
+  return dirContent.filter((x) => matchedFiles.includes(x));
 }
