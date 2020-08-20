@@ -62,14 +62,14 @@ export function getDirPath(filterState: FilterState[]): string {
 }
 
 export function getTimeDiff(timeUnit: TimeUnit, lastModifiedDate: Date): number {
-  const timeDiff = {
-    [TimeUnit.MILLIS]: { diff: calcTimeDiff, timeUnitInMs: MS },
-    [TimeUnit.SECONDS]: { diff: calcTimeDiff, timeUnitInMs: SEC_IN_MS },
-    [TimeUnit.MINUTES]: { diff: calcTimeDiff, timeUnitInMs: MIN_IN_MS },
-    [TimeUnit.HOURS]: { diff: calcTimeDiff, timeUnitInMs: HOUR_IN_MS },
+  const timeDiffUnitInMs = {
+    [TimeUnit.MILLIS]: MS,
+    [TimeUnit.SECONDS]: SEC_IN_MS,
+    [TimeUnit.MINUTES]: MIN_IN_MS,
+    [TimeUnit.HOURS]: HOUR_IN_MS,
   }[timeUnit];
 
-  return timeDiff.diff(lastModifiedDate, timeDiff.timeUnitInMs);
+  return calcTimeDiff(lastModifiedDate, timeDiffUnitInMs);
 }
 
 function calcTimeDiff(lastModifiedDate: Date, timeUnitInMs: number): number {
