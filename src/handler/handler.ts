@@ -1,9 +1,5 @@
 import { FilterState } from "../filters/filter-interface";
 
-/**
- * setNext() for building the chain of handlers.
- * handle() for executing a request.
- */
 export interface Handler {
   setNext(handler: Handler): Handler;
   handle(request: FilterState, dirContent: string[]): Promise<string[]>;

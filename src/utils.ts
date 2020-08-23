@@ -1,12 +1,12 @@
 import { join, parse } from "path";
-import { NameFiltererArgs, FilterState, isDirFilter } from "../filters/filter-interface";
-import { unlink, readdir } from "../asyncFs";
-import { AbstractHandler } from "../handler/handler";
+import { NameFiltererArgs, FilterState, isDirFilter } from "./filters/filter-interface";
+import { unlink, readdir } from "./asyncFs";
+import { AbstractHandler } from "./handler/handler";
 import {
   TimeFilterHandler,
   NameFilterHandler,
   ExtensionFilterHandler,
-} from "../handler/conrete-handlers";
+} from "./handler/conrete-handlers";
 
 const MS = 1;
 const SEC_IN_MS = MS * 1000;

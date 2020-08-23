@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readdir, unlink } from "../src/asyncFs";
-import { RemoveFiles } from "../src/rmby";
+import { remove } from "../src/rmby";
 
 jest.mock("../src/asyncFs", () => ({
   readdir: jest.fn(),
@@ -22,7 +22,7 @@ describe("Remove By File Extension Tests", () => {
   });
 
   it("should remove all files that equal to provided file extension", async () => {
-    const deletedFiles = await new RemoveFiles().from(dirPath).byExtension(".txt").run();
+    const deletedFiles = await remove().from(dirPath).byExtension(".txt").run();
 
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledTimes(1);
@@ -31,7 +31,7 @@ describe("Remove By File Extension Tests", () => {
   });
 
   it("should return empty array and do nothing if name is not equal", async () => {
-    const deletedFiles = await new RemoveFiles().from(dirPath).byExtension(".java").run();
+    const deletedFiles = await remove().from(dirPath).byExtension(".java").run();
 
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
@@ -41,7 +41,7 @@ describe("Remove By File Extension Tests", () => {
   it("should throw exception if readdir() goes wrong", async () => {
     (readdir as any).mockResolvedValue(new Error());
 
-    expect(new RemoveFiles().from(dirPath).byExtension(".java").run()).rejects.toThrow();
+    expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
   });
@@ -53,7 +53,7 @@ describe("Remove By File Extension Tests", () => {
       },
     );
 
-    await expect(new RemoveFiles().from(dirPath).byExtension(".txt").run()).rejects.toBeTruthy();
+    await expect(remove().from(dirPath).byExtension(".txt").run()).rejects.toBeTruthy();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledTimes(1);
   });

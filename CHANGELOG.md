@@ -6,6 +6,14 @@
 
 ### Changed
 
+- The API got refactored from classes to functions. The library now just exposes the function `remove` which can be invoked for chaining.
+The `byTime` part of the API got a small change with the chaining order leading to this **breaking change**. Now after calling `byTime`, you need to call `olderThan` and than you can specify your desired time unit.
+
+```diff
+- new RemoveFiles().from("/some/path").byTime().inHours().olderThan(12).run()
++ remove().from("/some/path").byTime().olderThan(12).hours().run()
+```
+
 ### Fixed
 
 ### Removed

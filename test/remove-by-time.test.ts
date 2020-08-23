@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readdir, stat, unlink } from "../src/asyncFs";
-import { RemoveFiles } from "../src/rmby";
+import { remove } from "../src/rmby";
 
 jest.mock("../src/asyncFs", () => ({
   readdir: jest.fn(),
@@ -57,12 +57,7 @@ describe("Remove By Time Tests", () => {
   });
 
   it("should remove all files older than given milliseconds", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byTime()
-      .inMilliseconds()
-      .olderThan(500)
-      .run();
+    const deletedFiles = await remove().from(dirPath).byTime().olderThan(500).milliseconds().run();
 
     expect(unlink).toHaveBeenCalledTimes(5);
     expect(unlink).not.toHaveBeenCalledWith(dir1);
@@ -76,12 +71,7 @@ describe("Remove By Time Tests", () => {
   });
 
   it("should remove all files older than given seconds", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byTime()
-      .inSeconds()
-      .olderThan(30)
-      .run();
+    const deletedFiles = await remove().from(dirPath).byTime().olderThan(30).seconds().run();
 
     expect(unlink).toHaveBeenCalledTimes(4);
     expect(unlink).not.toHaveBeenCalledWith(dir1);
@@ -95,12 +85,7 @@ describe("Remove By Time Tests", () => {
   });
 
   it("should remove all files older than given minutes", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byTime()
-      .inMinutes()
-      .olderThan(45)
-      .run();
+    const deletedFiles = await remove().from(dirPath).byTime().olderThan(45).minutes().run();
 
     expect(unlink).toHaveBeenCalledTimes(3);
     expect(unlink).not.toHaveBeenCalledWith(dir1);
@@ -114,12 +99,7 @@ describe("Remove By Time Tests", () => {
   });
 
   it("should remove all files older than given hours", async () => {
-    const deletedFiles = await new RemoveFiles()
-      .from(dirPath)
-      .byTime()
-      .inHours()
-      .olderThan(6)
-      .run();
+    const deletedFiles = await remove().from(dirPath).byTime().olderThan(6).hours().run();
 
     expect(unlink).toHaveBeenCalledTimes(2);
     expect(unlink).not.toHaveBeenCalledWith(dir1);
@@ -135,9 +115,7 @@ describe("Remove By Time Tests", () => {
   it("should throw exception if readdir() goes wrong", async () => {
     (readdir as any).mockResolvedValue(new Error());
 
-    await expect(
-      new RemoveFiles().from(dirPath).byTime().inHours().olderThan(1).run(),
-    ).rejects.toBeTruthy();
+    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toBeTruthy();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(stat).not.toHaveBeenCalled();
     expect(unlink).not.toHaveBeenCalled();
@@ -150,9 +128,7 @@ describe("Remove By Time Tests", () => {
       },
     );
 
-    await expect(
-      new RemoveFiles().from(dirPath).byTime().inHours().olderThan(1).run(),
-    ).rejects.toBeTruthy();
+    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toBeTruthy();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(stat).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
@@ -165,9 +141,7 @@ describe("Remove By Time Tests", () => {
       },
     );
 
-    await expect(
-      new RemoveFiles().from(dirPath).byTime().inHours().olderThan(1).run(),
-    ).rejects.toBeTruthy();
+    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toBeTruthy();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(stat).toHaveBeenCalled();
     expect(unlink).toHaveBeenCalledTimes(1);

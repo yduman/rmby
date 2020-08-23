@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { readdir, stat, unlink } from "../src/asyncFs";
-import { RemoveFiles } from "../src/rmby";
+import { remove } from "../src/rmby";
 
 jest.mock("../src/asyncFs", () => ({
   readdir: jest.fn(),
@@ -51,7 +51,7 @@ describe("Remove By Combination Tests", () => {
   });
 
   it("should be able to remove files with chained combinations", async () => {
-    const deletedFiles = await new RemoveFiles()
+    const deletedFiles = await remove()
       .from(dirPath)
       .byName()
       .thatStartsWith("f")
@@ -59,8 +59,8 @@ describe("Remove By Combination Tests", () => {
       .byExtension(".js")
       .and()
       .byTime()
-      .inHours()
       .olderThan(12)
+      .hours()
       .run();
 
     expect(readdir).toHaveBeenCalledTimes(1);
