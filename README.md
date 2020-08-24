@@ -36,15 +36,15 @@ The `RemoveFiles` class is all you need. You can navigate yourself through the A
 
 ```js
 // JavaScript
-const { RemoveFiles } = require("rmby");
+const { remove } = require("rmby");
 
 // TypeScript
-import { RemoveFiles } from "rmby";
+import { remove } from "rmby";
 ```
 
 ## API
 
-In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria's and will return a `Promise<string[]>` containing every file path that has been removed.
+In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria and will return a `Promise<string[]>` containing every file path that has been removed.
 
 ### Remove Files By Time
 
@@ -52,8 +52,7 @@ Files can be removed by a time difference in milliseconds, seconds, minutes or h
 
 ```js
 // Remove all files that are older than 12 hours
-async () =>
-  await new RemoveFiles().from("/some/path/to/dir").byTime().inHours().olderThan(12).run();
+remove().from("/some/path/to/dir").byTime().olderThan(12).hours().run();
 ```
 
 ### Remove Files By Name
@@ -62,8 +61,7 @@ Files can be removed regarding its name without considering the file extension. 
 
 ```js
 // Remove all files that start with "React"
-async () =>
-  await new RemoveFiles().from("/some/path/to/dir").byName().thatStartsWith("React").run();
+remove().from("/some/path/to/dir").byName().thatStartsWith("React").run();
 ```
 
 ### Remove Files By Extension
@@ -72,7 +70,7 @@ Files can be removed regarding their file extension. You can remove files that m
 
 ```js
 // Remove all .log files
-async () => await new RemoveFiles().from("/some/path/to/dir").byExtension(".log").run();
+remove().from("/some/path/to/dir").byExtension(".log").run();
 ```
 
 ### Remove Files By Combination
@@ -80,19 +78,18 @@ async () => await new RemoveFiles().from("/some/path/to/dir").byExtension(".log"
 Files can be removed by combining the available filters. Therefore you can create more specific filters for your remove use case.
 
 ```js
-// Remove all JS files that start with "f" and are older than 12 hours
-async () =>
-  await new RemoveFiles()
-    .from("/some/path/to/dir")
-    .byName()
-    .thatStartsWith("f")
-    .and()
-    .byExtension(".js")
-    .and()
-    .byTime()
-    .inHours()
-    .olderThan(12)
-    .run();
+// Remove all log files that start with "app" and are older than 12 hours
+remove()
+  .from("/some/path/to/dir")
+  .byName()
+  .thatStartsWith("app")
+  .and()
+  .byExtension(".log")
+  .and()
+  .byTime()
+  .olderThan(12)
+  .hours()
+  .run();
 ```
 
 ## Development
@@ -105,7 +102,7 @@ rmby is using [Jest](https://jestjs.io/) as a JavaScript Testing Framework. For 
 
 ## Philosophy
 
-The philosophy is to provide an easy to use library without dependencies for file removal in Node.js with a high declarative API. The fluent interface should guide the user through its use case.
+The philosophy is to provide an easy to use library for file removal in Node.js, without dependencies and with a very declarative API. The fluent interface should guide the user through its use case.
 
 ## People
 

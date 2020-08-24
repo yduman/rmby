@@ -6,6 +6,18 @@
 
 ### Changed
 
+### Fixed
+
+### Removed
+
+## [1.1.0]
+
+### Added
+
+- When your filter criteria does not match with any files it will throw an error and notify you
+
+### Changed
+
 - The API got refactored from classes to functions. The library now just exposes the function `remove` which can be invoked for chaining.
 The `byTime` part of the API got a small change with the chaining order leading to this **breaking change**. Now after calling `byTime`, you need to call `olderThan` and than you can specify your desired time unit.
 
@@ -16,7 +28,11 @@ The `byTime` part of the API got a small change with the chaining order leading 
 
 ### Fixed
 
+- Fixed a bug where the combination of filters would produce an incorrect filter result
+
 ### Removed
+
+- Classes from the old API
 
 ## [1.0.2] - 2020-08-19
 
@@ -116,10 +132,11 @@ new RemoveFiles()
 
 - Tests for `calcTimeDiff`, since it is no longer exported and is tested implicitly anyway
 
-[unreleased]: https://github.com/yduman/rmby/compare/1.0.2...master
+[unreleased]: https://github.com/yduman/rmby/compare/1.1.0...master
 [0.0.2]: https://github.com/yduman/rmby/releases/tag/0.0.2
 [0.0.3]: https://github.com/yduman/rmby/releases/tag/0.0.3
 [0.1.0]: https://github.com/yduman/rmby/releases/tag/0.1.0
 [1.0.0]: https://github.com/yduman/rmby/releases/tag/1.0.0
 [1.0.1]: https://github.com/yduman/rmby/releases/tag/1.0.1
 [1.0.2]: https://github.com/yduman/rmby/releases/tag/1.0.2
+[1.1.0]: https://github.com/yduman/rmby/releases/tag/1.1.0
