@@ -1,6 +1,6 @@
 {
   "name": "rmby",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A zero-dependency library with a fluent interface for removing files asynchronously by certain filters",
   "author": "Yadullah Duman",
   "license": "MIT",
@@ -42,20 +42,20 @@
     "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.9",
-    "@typescript-eslint/eslint-plugin": "^3.9.0",
-    "@typescript-eslint/parser": "^3.9.0",
-    "eslint": "^7.6.0",
+    "@types/jest": "^26.0.10",
+    "@typescript-eslint/eslint-plugin": "^3.9.1",
+    "@typescript-eslint/parser": "^3.9.1",
+    "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "husky": "^4.2.5",
-    "jest": "^26.3.0",
+    "jest": "^26.4.2",
     "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.0",
     "tempy": "^0.6.0",
     "ts-jest": "^26.2.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node",
