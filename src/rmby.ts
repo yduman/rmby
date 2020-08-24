@@ -96,10 +96,11 @@ function and(): ByFilter {
 async function run(): Run {
   let filteredFiles: string[] = [];
   const handlers = initHandlers();
-  const dirContent = await getDirectoryContent(filterState);
+  let dirContent = await getDirectoryContent(filterState);
 
   for (const filter of filterState) {
     filteredFiles = await handlers.handle(filter, dirContent);
+    dirContent = filteredFiles;
   }
 
   filterState = [];

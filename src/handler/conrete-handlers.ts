@@ -1,6 +1,6 @@
 import path from "path";
 import { stat } from "../asyncFs";
-import { getTimeDiff, filter } from "../utils";
+import { getTimeDiff, intersect } from "../utils";
 import { AbstractHandler } from "./handler";
 import {
   FilterState,
@@ -27,7 +27,7 @@ export class TimeFilterHandler extends AbstractHandler {
         }
       }
 
-      return filter(dirContent, matchedFiles);
+      return intersect(dirContent, matchedFiles);
     }
     return super.handle(request, dirContent);
   }
@@ -45,7 +45,7 @@ export class NameFilterHandler extends AbstractHandler {
         }
       }
 
-      return filter(dirContent, matchedFiles);
+      return intersect(dirContent, matchedFiles);
     }
     return super.handle(request, dirContent);
   }
@@ -64,7 +64,7 @@ export class ExtensionFilterHandler extends AbstractHandler {
         }
       }
 
-      return filter(dirContent, matchedFiles);
+      return intersect(dirContent, matchedFiles);
     }
     return super.handle(request, dirContent);
   }

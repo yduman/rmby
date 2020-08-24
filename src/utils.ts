@@ -31,8 +31,12 @@ export function initHandlers(): AbstractHandler {
 }
 
 export async function removeFiles(filteredFiles: string[]): Promise<string[]> {
-  await Promise.all(filteredFiles.map((file) => unlink(file)));
-  return filteredFiles;
+  if (filteredFiles.length === 0) {
+    throw new Error("Your filter criteria resulted in 0 matches.");
+  } else {
+    await Promise.all(filteredFiles.map((file) => unlink(file)));
+    return filteredFiles;
+  }
 }
 
 export async function getDirectoryContent(filterState: FilterState[]): Promise<string[]> {
@@ -96,6 +100,6 @@ function getRawFilename(fsObject: string): string {
   return parse(fsObject).name;
 }
 
-export function filter(dirContent: string[], matchedFiles: string[]): string[] {
+export function intersect(dirContent: string[], matchedFiles: string[]): string[] {
   return dirContent.filter((x) => matchedFiles.includes(x));
 }

@@ -10,6 +10,7 @@ jest.mock("../src/asyncFs", () => ({
 
 const dirPath = "/path/to/dir";
 const dirContent = ["file1.txt", "file2.css", "dir1", "dir2", "file3.html", "file4.js", "file5.js"];
+const file3 = "/path/to/dir/file3.html";
 const file5 = "/path/to/dir/file5.js";
 
 describe("Remove By Combination Tests", () => {
@@ -67,5 +68,20 @@ describe("Remove By Combination Tests", () => {
     expect(unlink).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledWith(file5);
     expect(deletedFiles).toEqual([file5]);
+  });
+
+  it("should be able to remove files with extension and than name", async () => {
+    const deletedFiles = await remove()
+      .from(dirPath)
+      .byExtension(".html")
+      .and()
+      .byName()
+      .thatStartsWith("file")
+      .run();
+
+    expect(readdir).toHaveBeenCalledTimes(1);
+    expect(unlink).toHaveBeenCalledTimes(1);
+    expect(unlink).toHaveBeenCalledWith(file3);
+    expect(deletedFiles).toEqual([file3]);
   });
 });

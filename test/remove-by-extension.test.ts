@@ -19,42 +19,36 @@ describe("Remove By File Extension Tests", () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   it("should remove all files that equal to provided file extension", async () => {
     const deletedFiles = await remove().from(dirPath).byExtension(".txt").run();
-
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledTimes(1);
     expect(unlink).toHaveBeenCalledWith(file1);
     expect(deletedFiles).toEqual([file1]);
   });
 
-  it("should return empty array and do nothing if name is not equal", async () => {
-    const deletedFiles = await remove().from(dirPath).byExtension(".java").run();
-
+  it("should throw error if no matches found", async () => {
+    await expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
     expect(readdir).toHaveBeenCalledTimes(1);
     expect(unlink).not.toHaveBeenCalled();
-    expect(deletedFiles).toEqual([]);
   });
 
-  it("should throw exception if readdir() goes wrong", async () => {
+  it("should throw error if readdir() goes wrong", async () => {
     (readdir as any).mockResolvedValue(new Error());
-
-    expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
-    expect(readdir).toHaveBeenCalledTimes(1);
+    await expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
     expect(unlink).not.toHaveBeenCalled();
   });
 
-  it("should throw exception if unlink() goes wrong", async () => {
+  it("should throw error if unlink() goes wrong", async () => {
     (unlink as any).mockImplementationOnce(
       (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
         callback(new Error());
       },
     );
-
-    await expect(remove().from(dirPath).byExtension(".txt").run()).rejects.toBeTruthy();
-    expect(readdir).toHaveBeenCalledTimes(1);
-    expect(unlink).toHaveBeenCalledTimes(1);
+    await expect(remove().from(dirPath).byExtension(".js").run()).rejects.toThrow();
+    expect(unlink).not.toHaveBeenCalled();
   });
 });

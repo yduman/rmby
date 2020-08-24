@@ -27,7 +27,7 @@ describe("Remove By Name Tests", () => {
     jest.resetAllMocks();
   });
 
-  describe("thatEqualsTo()", () => {
+  describe("thatEquals()", () => {
     it("should remove all files that equal to provided name", async () => {
       const deletedFiles = await remove().from(dirPath).byName().thatEquals("file1").run();
 
@@ -39,23 +39,16 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1]);
     });
 
-    it("should return empty array and do nothing if name is not equal", async () => {
-      const deletedFiles = await remove()
-        .from(dirPath)
-        .byName()
-        .thatEquals("somethingThatDoesNotExist")
-        .run();
-
-      expect(readdir).toHaveBeenCalledTimes(1);
+    it("should throw error if there is no match", async () => {
+      await expect(
+        remove().from(dirPath).byName().thatEquals("somethingThatDoesNotExist").run(),
+      ).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
-      expect(deletedFiles).toEqual([]);
     });
 
-    it("should throw exception if readdir() goes wrong", async () => {
+    it("should throw error if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
-
-      expect(remove().from(dirPath).byName().thatEquals("foo").run()).rejects.toThrow();
-      expect(readdir).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatEquals("foo").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
     });
 
@@ -65,10 +58,8 @@ describe("Remove By Name Tests", () => {
           callback(new Error());
         },
       );
-
-      await expect(remove().from(dirPath).byName().thatEquals("file1").run()).rejects.toBeTruthy();
-      expect(readdir).toHaveBeenCalledTimes(1);
-      expect(unlink).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatEquals("file1").run()).rejects.toThrow();
+      expect(unlink).not.toHaveBeenCalled();
     });
   });
 
@@ -88,19 +79,14 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1, file2, file3, file4, file5]);
     });
 
-    it("should return empty array and do nothing if no filename starts with provided name", async () => {
-      const deletedFiles = await remove().from(dirPath).byName().thatStartsWith("xxx").run();
-
-      expect(readdir).toHaveBeenCalledTimes(1);
+    it("should throw error if there is no match", async () => {
+      await expect(remove().from(dirPath).byName().thatStartsWith("xxx").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
-      expect(deletedFiles).toEqual([]);
     });
 
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
-
-      expect(remove().from(dirPath).byName().thatStartsWith("foo").run()).rejects.toThrow();
-      expect(readdir).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatStartsWith("foo").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
     });
 
@@ -110,12 +96,10 @@ describe("Remove By Name Tests", () => {
           callback(new Error());
         },
       );
-
       await expect(
         remove().from(dirPath).byName().thatStartsWith("file").run(),
       ).rejects.toBeTruthy();
-      expect(readdir).toHaveBeenCalledTimes(1);
-      expect(unlink).toHaveBeenCalledTimes(1);
+      expect(unlink).not.toHaveBeenCalled();
     });
   });
 
@@ -131,19 +115,14 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file3]);
     });
 
-    it("should return empty array and do nothing if no filename ends with provided name", async () => {
-      const deletedFiles = await remove().from(dirPath).byName().thatEndsWith("xxx").run();
-
-      expect(readdir).toHaveBeenCalledTimes(1);
+    it("should throw error if there is no match", async () => {
+      await expect(remove().from(dirPath).byName().thatEndsWith("xxx").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
-      expect(deletedFiles).toEqual([]);
     });
 
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
-
-      expect(remove().from(dirPath).byName().thatEndsWith("foo").run()).rejects.toThrow();
-      expect(readdir).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatEndsWith("foo").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
     });
 
@@ -153,10 +132,8 @@ describe("Remove By Name Tests", () => {
           callback(new Error());
         },
       );
-
-      await expect(remove().from(dirPath).byName().thatEndsWith("3").run()).rejects.toBeTruthy();
-      expect(readdir).toHaveBeenCalledTimes(1);
-      expect(unlink).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatEndsWith("3").run()).rejects.toThrow();
+      expect(unlink).not.toHaveBeenCalled();
     });
   });
 
@@ -176,19 +153,14 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1, file2, file3, file4, file5]);
     });
 
-    it("should return empty array and do nothing if no filename includes the provided name", async () => {
-      const deletedFiles = await remove().from(dirPath).byName().thatIncludes("xxx").run();
-
-      expect(readdir).toHaveBeenCalledTimes(1);
+    it("should throw error if there is no match", async () => {
+      await expect(remove().from(dirPath).byName().thatIncludes("xxx").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
-      expect(deletedFiles).toEqual([]);
     });
 
     it("should throw exception if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
-
-      expect(remove().from(dirPath).byName().thatIncludes("foo").run()).rejects.toThrow();
-      expect(readdir).toHaveBeenCalledTimes(1);
+      await expect(remove().from(dirPath).byName().thatIncludes("foo").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
     });
 
@@ -198,10 +170,8 @@ describe("Remove By Name Tests", () => {
           callback(new Error());
         },
       );
-
       await expect(remove().from(dirPath).byName().thatIncludes("ile").run()).rejects.toBeTruthy();
-      expect(readdir).toHaveBeenCalledTimes(1);
-      expect(unlink).toHaveBeenCalledTimes(1);
+      expect(unlink).not.toHaveBeenCalled();
     });
   });
 });
