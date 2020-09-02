@@ -30,25 +30,10 @@ describe("Remove By File Extension Tests", () => {
     expect(deletedFiles).toEqual([file1]);
   });
 
-  it("should throw error if no matches found", async () => {
-    await expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
+  it("should return empty results and delete nothing if no matches found", async () => {
+    const deleteResult = await remove().from(dirPath).byExtension(".java").run();
     expect(readdir).toHaveBeenCalledTimes(1);
-    expect(unlink).not.toHaveBeenCalled();
-  });
-
-  it("should throw error if readdir() goes wrong", async () => {
-    (readdir as any).mockResolvedValue(new Error());
-    await expect(remove().from(dirPath).byExtension(".java").run()).rejects.toThrow();
-    expect(unlink).not.toHaveBeenCalled();
-  });
-
-  it("should throw error if unlink() goes wrong", async () => {
-    (unlink as any).mockImplementationOnce(
-      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-        callback(new Error());
-      },
-    );
-    await expect(remove().from(dirPath).byExtension(".js").run()).rejects.toThrow();
+    expect(deleteResult.length).toBe(0);
     expect(unlink).not.toHaveBeenCalled();
   });
 });

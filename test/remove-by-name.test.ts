@@ -30,7 +30,6 @@ describe("Remove By Name Tests", () => {
   describe("thatEquals()", () => {
     it("should remove all files that equal to provided name", async () => {
       const deletedFiles = await remove().from(dirPath).byName().thatEquals("file1").run();
-
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledWith(file1);
@@ -39,26 +38,21 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1]);
     });
 
-    it("should throw error if there is no match", async () => {
-      await expect(
-        remove().from(dirPath).byName().thatEquals("somethingThatDoesNotExist").run(),
-      ).rejects.toThrow();
+    it("should return empty results and delete nothing if there is no match", async () => {
+      const deleteResults = await remove()
+        .from(dirPath)
+        .byName()
+        .thatEquals("somethingThatDoesNotExist")
+        .run();
+      expect(deleteResults.length).toBe(0);
       expect(unlink).not.toHaveBeenCalled();
     });
 
     it("should throw error if readdir() goes wrong", async () => {
       (readdir as any).mockResolvedValue(new Error());
-      await expect(remove().from(dirPath).byName().thatEquals("foo").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if unlink() goes wrong", async () => {
-      (unlink as any).mockImplementationOnce(
-        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-          callback(new Error());
-        },
+      await expect(remove().from(dirPath).byName().thatEquals("foo").run()).resolves.toStrictEqual(
+        [],
       );
-      await expect(remove().from(dirPath).byName().thatEquals("file1").run()).rejects.toThrow();
       expect(unlink).not.toHaveBeenCalled();
     });
   });
@@ -79,26 +73,9 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1, file2, file3, file4, file5]);
     });
 
-    it("should throw error if there is no match", async () => {
-      await expect(remove().from(dirPath).byName().thatStartsWith("xxx").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if readdir() goes wrong", async () => {
-      (readdir as any).mockResolvedValue(new Error());
-      await expect(remove().from(dirPath).byName().thatStartsWith("foo").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if unlink() goes wrong", async () => {
-      (unlink as any).mockImplementationOnce(
-        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-          callback(new Error());
-        },
-      );
-      await expect(
-        remove().from(dirPath).byName().thatStartsWith("file").run(),
-      ).rejects.toBeTruthy();
+    it("should return empty results and delete nothing if there is no match", async () => {
+      const deleteResults = await remove().from(dirPath).byName().thatStartsWith("xxx").run();
+      expect(deleteResults.length).toBe(0);
       expect(unlink).not.toHaveBeenCalled();
     });
   });
@@ -106,7 +83,6 @@ describe("Remove By Name Tests", () => {
   describe("thatEndsWith()", () => {
     it("should remove all files that end with the provided name", async () => {
       const deletedFiles = await remove().from(dirPath).byName().thatEndsWith("3").run();
-
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledWith(file3);
@@ -115,24 +91,9 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file3]);
     });
 
-    it("should throw error if there is no match", async () => {
-      await expect(remove().from(dirPath).byName().thatEndsWith("xxx").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if readdir() goes wrong", async () => {
-      (readdir as any).mockResolvedValue(new Error());
-      await expect(remove().from(dirPath).byName().thatEndsWith("foo").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if unlink() goes wrong", async () => {
-      (unlink as any).mockImplementationOnce(
-        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-          callback(new Error());
-        },
-      );
-      await expect(remove().from(dirPath).byName().thatEndsWith("3").run()).rejects.toThrow();
+    it("should return empty results and delete nothing if there is no match", async () => {
+      const deleteResults = await remove().from(dirPath).byName().thatEndsWith("xxx").run();
+      expect(deleteResults.length).toBe(0);
       expect(unlink).not.toHaveBeenCalled();
     });
   });
@@ -140,7 +101,6 @@ describe("Remove By Name Tests", () => {
   describe("thatIncludes()", () => {
     it("should remove all files that that include the provided name", async () => {
       const deletedFiles = await remove().from(dirPath).byName().thatIncludes("ile").run();
-
       expect(readdir).toHaveBeenCalledTimes(1);
       expect(unlink).toHaveBeenCalledTimes(5);
       expect(unlink).toHaveBeenCalledWith(file1);
@@ -153,24 +113,9 @@ describe("Remove By Name Tests", () => {
       expect(deletedFiles).toEqual([file1, file2, file3, file4, file5]);
     });
 
-    it("should throw error if there is no match", async () => {
-      await expect(remove().from(dirPath).byName().thatIncludes("xxx").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if readdir() goes wrong", async () => {
-      (readdir as any).mockResolvedValue(new Error());
-      await expect(remove().from(dirPath).byName().thatIncludes("foo").run()).rejects.toThrow();
-      expect(unlink).not.toHaveBeenCalled();
-    });
-
-    it("should throw exception if unlink() goes wrong", async () => {
-      (unlink as any).mockImplementationOnce(
-        (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-          callback(new Error());
-        },
-      );
-      await expect(remove().from(dirPath).byName().thatIncludes("ile").run()).rejects.toBeTruthy();
+    it("should return empty results and delete nothing if there is no match", async () => {
+      const deleteResults = await remove().from(dirPath).byName().thatIncludes("xxx").run();
+      expect(deleteResults.length).toBe(0);
       expect(unlink).not.toHaveBeenCalled();
     });
   });

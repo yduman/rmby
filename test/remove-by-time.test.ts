@@ -112,31 +112,4 @@ describe("Remove By Time Tests", () => {
     expect(unlink).toHaveBeenCalledWith(file5);
     expect(deletedFiles).toEqual([file4, file5]);
   });
-
-  it("should throw exception if readdir() goes wrong", async () => {
-    (readdir as any).mockResolvedValue(new Error());
-    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toThrow();
-    expect(unlink).not.toHaveBeenCalled();
-  });
-
-  it("should throw exception if stat() goes wrong", async () => {
-    (stat as any).mockImplementationOnce(
-      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-        callback(new Error());
-      },
-    );
-    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toThrow();
-    expect(unlink).not.toHaveBeenCalled();
-  });
-
-  it("should throw exception if unlink() goes wrong", async () => {
-    (unlink as any).mockImplementationOnce(
-      (filename: string, callback: (err: NodeJS.ErrnoException | null) => void) => {
-        callback(new Error());
-      },
-    );
-
-    await expect(remove().from(dirPath).byTime().olderThan(1).hours().run()).rejects.toThrow();
-    expect(unlink).toHaveBeenCalledTimes(1);
-  });
 });

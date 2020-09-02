@@ -98,9 +98,11 @@ async function run(): Run {
   const handlers = initHandlers();
   let dirContent = await getDirectoryContent(filterState);
 
-  for (const filter of filterState) {
-    filteredFiles = await handlers.handle(filter, dirContent);
-    dirContent = filteredFiles;
+  if (dirContent.length > 0) {
+    for (const filter of filterState) {
+      filteredFiles = await handlers.handle(filter, dirContent);
+      dirContent = filteredFiles;
+    }
   }
 
   filterState = [];

@@ -31,25 +31,27 @@ export function initHandlers(): AbstractHandler {
 }
 
 export async function removeFiles(filteredFiles: string[]): Promise<string[]> {
-  if (filteredFiles.length === 0) {
-    throw new Error("Your filter criteria resulted in 0 matches.");
-  } else {
+  if (filteredFiles.length > 0) {
     await Promise.all(filteredFiles.map((file) => unlink(file)));
-    return filteredFiles;
   }
+  return filteredFiles;
 }
 
 export async function getDirectoryContent(filterState: FilterState[]): Promise<string[]> {
-  const dirContentWithFullPaths: string[] = [];
-  const dirPath = getDirPath(filterState);
-  const dirContent = await readdir(dirPath);
+  try {
+    const dirContentWithFullPaths: string[] = [];
+    const dirPath = getDirPath(filterState);
+    const dirContent = await readdir(dirPath);
 
-  for (const fsObject of dirContent) {
-    const fsObjectPath = join(dirPath, fsObject);
-    dirContentWithFullPaths.push(fsObjectPath);
+    for (const fsObject of dirContent) {
+      const fsObjectPath = join(dirPath, fsObject);
+      dirContentWithFullPaths.push(fsObjectPath);
+    }
+
+    return dirContentWithFullPaths;
+  } catch (error) {
+    return [];
   }
-
-  return dirContentWithFullPaths;
 }
 
 export function getDirPath(filterState: FilterState[]): string {
