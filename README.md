@@ -44,7 +44,7 @@ import { remove } from "rmby";
 
 ## API
 
-In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria and will return a `Promise<string[]>` containing every file path that has been removed.
+In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria and will return a `Promise<string[]>` containing every file path that has been removed. If your filter cannot find matches, it will just return an empty array.
 
 ### Remove Files By Time
 

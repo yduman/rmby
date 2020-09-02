@@ -10,6 +10,21 @@
 
 ### Removed
 
+## [1.1.1] - 2020-09-02
+
+### Changed
+
+- Updated development libraries that are now compatible with version 4 of TypeScript
+- Previously, when executing `run()` it would throw an error if the filter couldn't find anything. This feels wrong, because it can be totally fine if the filter doesn't find anything. Now the function will return an empty array if the filter could not find any results.
+
+### Fixed
+
+- Tests for filters that don't find matches
+
+### Removed
+
+- Tests for cases when `fs` functions fail for some reason. These tests were kind of useless and now obsolete since in case of failure we don't delete anything and just return an empty array.
+
 ## [1.1.0] - 2020-08-24
 
 ### Added
@@ -131,7 +146,7 @@ new RemoveFiles()
 
 - Tests for `calcTimeDiff`, since it is no longer exported and is tested implicitly anyway
 
-[unreleased]: https://github.com/yduman/rmby/compare/1.1.0...master
+[unreleased]: https://github.com/yduman/rmby/compare/1.1.1...master
 [0.0.2]: https://github.com/yduman/rmby/releases/tag/0.0.2
 [0.0.3]: https://github.com/yduman/rmby/releases/tag/0.0.3
 [0.1.0]: https://github.com/yduman/rmby/releases/tag/0.1.0
@@ -139,3 +154,4 @@ new RemoveFiles()
 [1.0.1]: https://github.com/yduman/rmby/releases/tag/1.0.1
 [1.0.2]: https://github.com/yduman/rmby/releases/tag/1.0.2
 [1.1.0]: https://github.com/yduman/rmby/releases/tag/1.1.0
+[1.1.1]: https://github.com/yduman/rmby/releases/tag/1.1.1
