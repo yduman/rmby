@@ -1,6 +1,6 @@
 {
   "name": "rmby",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A zero-dependency library with a fluent interface for removing files asynchronously by certain filters",
   "author": "Yadullah Duman",
   "license": "MIT",
@@ -20,7 +20,12 @@
   ],
   "keywords": [
     "file",
+    "files",
+    "folder",
+    "folders",
     "remove",
+    "destroy",
+    "trash",
     "filter",
     "async",
     "fs",
@@ -28,7 +33,14 @@
     "unlink",
     "readdir",
     "stat",
-    "promises"
+    "promises",
+    "clean",
+    "cleaning",
+    "cleanup",
+    "rm",
+    "rmrf",
+    "rimraf",
+    "removeby"
   ],
   "scripts": {
     "build": "tsc",
