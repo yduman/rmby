@@ -32,7 +32,7 @@ $ yarn add rmby
 
 ## Usage
 
-The `RemoveFiles` class is all you need. You can navigate yourself through the API by chaining methods, since the API provides a [fluent interface](https://martinfowler.com/bliki/FluentInterface.html). On the [API section](#api) you can see more details about the usage.
+The `remove` function is all you need. You can navigate yourself through the API by chaining functions, since the API provides a [fluent interface](https://martinfowler.com/bliki/FluentInterface.html). On the [API section](#api) you can see more details about the usage.
 
 ```js
 // JavaScript
@@ -44,7 +44,7 @@ import { remove } from "rmby";
 
 ## API
 
-In order to run your remove query, you have to call the `run()` method at the end of your chain. This method will remove all files that match with your filter criteria and will return a `Promise<string[]>` containing every file path that has been removed. If your filter cannot find matches, it will just return an empty array.
+In order to run your remove query, you have to call the `run()` method at the end of your function chain. This function will remove all files that match with your filter criteria and will return a `Promise<string[]>` containing every file path that has been removed. If your filter cannot find matches, it will just return an empty array and do nothing.
 
 ### Remove Files By Time
 
@@ -66,7 +66,7 @@ remove().from("/some/path/to/dir").byName().thatStartsWith("React").run();
 
 ### Remove Files By Extension
 
-Files can be removed regarding their file extension. You can remove files that match exactly with the extension you provide.
+Files can be removed regarding their file extension. You can remove files that match exactly with the file extension you provide.
 
 ```js
 // Remove all .log files
@@ -75,7 +75,7 @@ remove().from("/some/path/to/dir").byExtension(".log").run();
 
 ### Remove Files By Combination
 
-Files can be removed by combining the available filters. Therefore you can create more specific filters for your remove use case.
+Files can be removed by combining the available filters. Therefore you can create more specific filters for your use case.
 
 ```js
 // Remove all log files that start with "app" and are older than 12 hours
