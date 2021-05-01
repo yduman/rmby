@@ -7,20 +7,6 @@
 
 rmby ("remove by") is a zero-dependency Node.js library with a fluent interface for removing files asynchronously by certain aspects.
 
-- [rmby](#rmby)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [API](#api)
-    - [Remove Files By Time](#remove-files-by-time)
-    - [Remove Files By Name](#remove-files-by-name)
-    - [Remove Files By Extension](#remove-files-by-extension)
-    - [Remove Files By Combination](#remove-files-by-combination)
-  - [Development](#development)
-  - [Testing](#testing)
-  - [Philosophy](#philosophy)
-  - [People](#people)
-  - [License](#license)
-
 ## Installation
 
 Node.js v10 or higher is required
