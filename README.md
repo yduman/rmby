@@ -9,7 +9,7 @@ rmby ("remove by") is a zero-dependency Node.js library with a fluent interface 
 
 ## Installation
 
-Node.js v10 or higher is required
+Node.js v12 or higher is required
 
 ```console
 $ npm i --save rmby
